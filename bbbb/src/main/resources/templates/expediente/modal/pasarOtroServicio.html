@@ -1,0 +1,59 @@
+
+
+	<div class="modal-header">
+     <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+       <span aria-hidden="true">&times;</span>
+     </button>
+   </div>
+   <div class="modal-body">
+    	<div class="modal-body-insert">
+    		<form>
+		     <div class="col-sm-4">
+                <div class="form-group">
+	                <label for="InputNombre">Servicio</label>
+	                <input type="text" class="form-control" name="organigrama.nombre" id="organigrama" placeholder="Servicio" required="required">
+	                <input type="hidden" class="form-control" id="organigrama_id" name="organigrama" placeholder="Servicio" required="required">
+              	</div>
+             </div>
+		     <div class="form-group">
+		       <label for="message-text" class="col-form-label">Message:</label>
+		       <textarea class="form-control" id="message-text"></textarea>
+		     </div>
+		</form>
+   	</div>
+   </div>
+   <div class="modal-footer">
+     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+     <button type="button" class="btn btn-primary">Send message</button>
+   </div>
+   <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
+   <script>
+$( function(){
+	$("#organigrama").autocomplete({
+
+		source : function(request, response) {
+			$.ajax({
+				url : "/organigramas/suggest-organigrama/" + request.term,
+				dataType : "json",
+				data : {
+					term : request.term
+				},
+				success : function(data) {
+					response($.map(data, function(item) {
+						return {
+							value : item.id,
+							label : item.nombre
+						};
+					}));
+				},
+			});
+		},
+		select : function(event, ui) {
+			$("#organigrama").val(ui.item.label);
+			$("#organigrama_id").val(ui.item.value);
+
+			return false;
+		}
+});
+</script> 
