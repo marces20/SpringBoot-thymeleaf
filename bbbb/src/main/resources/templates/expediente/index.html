@@ -32,7 +32,7 @@
 		          	
 					<div class="card">
 		             	<div class="card-body">
-		             	
+		             	<div th:replace="fragments/alertSucces :: alertSucces"></div>	
 		             	 <form th:action="@{/expedientes/index}" method="get">
 			             	 <div class="row">
 			             	 	<div class="col-sm-2">
@@ -71,8 +71,11 @@
 		                    </tr>
 		                    </thead>
 		                    <tbody>
-			                    <tr th:each="expediente : ${expedientes}">
-			                      <td></td>	
+		                    
+		                  o.estado_id" data-href="@controllers.contabilidad.routes.PagosController.ver(pago.id)&@UriTrack.encode()"
+		                    
+			                    <tr th:each="expediente : ${expedientes}" class="pointer" th:href="@{/expedientes/show/{id} (id=${expediente.id}) }">
+			                      <td class="notSeleccion"></td>	
 			                      <td th:text="${expediente.organigrama.codigo_expediente}"></td>
 			                      <td th:text="${expediente.nombre}"></td>
 			                      <td th:text="${#dates.format(expediente.fecha, 'dd/MM/yyyy')}"></td>
@@ -80,7 +83,7 @@
 			                      <td th:text="${expediente.ejercicio.nombre}"></td>
 			                      <td th:text="${expediente.iniciador.nombre}"></td>
 			                      
-			                      <td>
+			                      <td class="notSeleccion">
 			                      	<a th:href="@{/expedientes/delete/{id} (id=${expediente.id}) }" 
 			                      		onclick="return confirm('¿Estas seguro?')" 
 			                      		class="btn btn-danger btn-sm" role="button" title="Eliminar">

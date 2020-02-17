@@ -9,7 +9,7 @@
 	      </li>
 	      <li class="nav-item"> 
 	      	<a class="nav-link" data-widget="pushmenu" href="#">
-	      		EXPEDIENTEScc
+	      		EXPEDIENTES
 	      	</a> 
 	      </li> 
 	       
@@ -22,8 +22,7 @@
 	    	<li class="nav-item dropdown">
 			    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Acciones</a>
 			    <div class="dropdown-menu">
-			      <a class="dropdown-item" href="#" data-toggle="modal" 
-			      									data-target="#exampleModal" 
+			      <a class="dropdown-item" id="reportePaseExpediente" href="#" 
 			      									data-title="Pasar a otro Servicio"
 			      									data-url="/expedientes/modalPasarOtroServicio">Pasar a Otro Servicio</a>
 			      			   
@@ -61,7 +60,10 @@
 	          <img th:src="@{/img/avatar04.png}" class="img-circle elevation-2" alt="User Image">
 	        </div>
 	        <div class="info">
-	          <a href="#" class="d-block">Marcos Villamil</a>
+	        	<div sec:authorize="isAuthenticated()">
+	        		<a href="#" class="d-block" sec:authentication="name"></a>
+      			</div>	
+	          
 	        </div>
 	      </div>
 	

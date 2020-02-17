@@ -26,7 +26,7 @@
 		              	
 		              	 
 		              	
-		              	<input type="hidden" th:field="*{id}">
+		              	<input type="hidden" th:field="*{id}" id="id" name="id" >
 		                <div class="card-body">
 		                  
 		                  
@@ -37,13 +37,13 @@
 		                      <div class="form-group">
 			                    <label for="InputNombre">Servicio</label>
 			                    <input type="text" th:disabled="${disabled}" class="form-control" th:field="*{organigrama.nombre}" name="organigrama.nombre" id="organigrama" placeholder="Servicio" required="required">
-			                    <input type="hidden" th:disabled="${disabled}" th:field="*{organigrama}" class="form-control" id="organigrama_id" name="organigrama" placeholder="Servicio" required="required">
+			                    <input type="hidden" th:disabled="${disabled}" th:field="*{organigrama.id}" class="form-control" id="organigrama_id" name="organigrama.id" placeholder="Servicio" required="required">
 			                  </div>
 		                    </div>
 		                    <div class="col-sm-2">
 		                      <div class="form-group">
 			                    <label for="InputNombre">Ejercicio</label>
-			                    <select class="form-control" th:field="*{ejercicio}" id="ejercicio">
+			                    <select th:disabled="${disabled}" class="form-control" th:field="*{ejercicio}" id="ejercicio">
 			                    	<option th:each="ejer : ${ejercicios}" th:value="${ejer.id}" th:text="${ejer.nombre}"></option>
 			                    </select>
 			                    
@@ -75,7 +75,7 @@
 		                      <div class="form-group">
 			                    <label for="InputNombre">Iniciador</label>
 			                    <input type="text" th:disabled="${disabled}"   class="form-control" th:field="*{iniciador.nombre}" name="iniciador.nombre" id="iniciador" placeholder="Iniciador" required="required">
-			                    <input type="hidden" th:disabled="${disabled}" th:field="*{iniciador}" class="form-control" id="iniciador_id" name="iniciador" required="required">
+			                    <input type="hidden" th:disabled="${disabled}" th:field="*{iniciador.id}" class="form-control" id="iniciador_id" name="iniciador.id" required="required">
 			                  </div>
 		                    </div>
 		                  </div>
@@ -83,9 +83,12 @@
 		                <!-- /.card-body -->
 		
 		                <div class="card-footer">
-		                	<div >
-		                  		<button type="submit" class="btn btn-primary">Guardar</button>
+		                	<div th:if="${disabled}">
+		                  		<a class="btn btn-primary" th:href="@{/expedientes/edit/{id} (id=${id})}">Editar</a>
 		                  	</div>
+		                  	<div th:unless="${disabled}">
+							  <button type="submit" class="btn btn-primary">Guardar</button>
+							</div>
 		                </div>
 		              </form>
 		           </div>
@@ -122,12 +125,12 @@
 			            			</tr>
 				                    </thead>
 				                    <tbody>
-					                    <tr>
+					                    <tr th:each="em : ${expediente.expedienteMovimiento}">
 					                    	<td></td>
-			                      			<td></td>
-			                      			<td></td>
-			                      			<td></td>
-			                      			<td></td>
+			                      			<td th:text="${em.organigrama.nombre}"></td>
+			                      			<td th:text="${em.usuario.nombre}"></td>
+			                      			<td th:text="${em.fecha_llegada}"></td>
+			                      			<td th:text="${em.fecha_salida}"></td>
 			                      			<td></td>
 					                    </tr>
 				                    </tbody>
