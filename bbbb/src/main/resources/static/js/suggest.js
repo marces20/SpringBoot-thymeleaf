@@ -1,8 +1,26 @@
  
+	
+	
 	$(document).ready(function() {
 		 
-			
-			$("#organigrama").autocomplete({
+		/*if($("#orga").length){
+			 
+			var options = {
+					script:"/organigramas/suggest-organigrama/",
+					varname:"",
+					json:true,
+					shownoresults:true,
+					maxresults:6,
+					callback: function (obj) { 		
+												$("#orga_id").val(obj.id); 
+											 }
+				};
+			var as_json = new bsn.AutoSuggest('orga', options);
+		} 	*/
+		 
+		
+		
+			/*$("#organigrama").autocomplete({
 	
 				source : function(request, response) {
 					$.ajax({
@@ -54,5 +72,5 @@
 
 				return false;
 			}
-		});
+		});*/
 	});
