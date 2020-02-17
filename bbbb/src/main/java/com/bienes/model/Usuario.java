@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
@@ -39,6 +40,10 @@ public class Usuario {
 	private String email;
 	
 	private Integer estatus;
+	
+	@ManyToOne
+    @JoinColumn(name="organigrama_id")
+	private Organigrama organigrama;
 	
 	public Integer getId() {
 		return id;

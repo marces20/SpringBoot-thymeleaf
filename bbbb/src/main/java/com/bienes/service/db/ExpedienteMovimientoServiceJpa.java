@@ -1,5 +1,6 @@
 package com.bienes.service.db;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -41,5 +42,11 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 		expeMoviRepo.deleteById(idExpedienteMovimiento);
 		
 	}
+
+	@Override
+	public List<ExpedienteMovimiento> getByExpedienteId(Integer idExpediente) {
+		return expeMoviRepo.getByExpedienteId(idExpediente);
+	}
+	
 	
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.security.core.Authentication;
 
 import com.bienes.model.Expediente;
+import com.bienes.model.ExpedienteMovimiento;
 import com.bienes.service.IEjercicioService;
 import com.bienes.service.IExpedienteService;
 import com.bienes.util.PageRender; 
@@ -96,10 +99,10 @@ public class ExpedientesController {
 				//expediente.setWrite_user(write_user);
 			}
 			serviceExpedientes.guardar(expediente);
-			attributes.addFlashAttribute("msg", "Los datos del expediente fueron guardados!");
+			attributes.addFlashAttribute("msgsuccess", "Los datos del expediente fueron guardados!");
 			return "redirect:/expedientes/index";
 		} catch (Exception e) {
-			attributes.addFlashAttribute("msg", "Error no se ha podido guardar el expediente.");
+			attributes.addFlashAttribute("msgalert", "Error no se ha podido guardar el expediente."+e);
 			return "redirect:/expedientes/index";
 		}	
 	}
@@ -118,8 +121,14 @@ public class ExpedientesController {
 		model.addAttribute("ejercicios", serviceEjercicio.findAll());
 	}
 	
+	@ModelAttribute
+	public void userAuth(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		model.addAttribute("userAuth", auth.getName());
+	}
+	
 	@GetMapping("/modalPasarOtroServicio")
-	public String modalPasarOtroServicio() {
+	public String modalPasarOtroServicio(@ModelAttribute ExpedienteMovimiento expedienteMovimiento, Model model) {
 		return "expediente/modal/pasarOtroServicio";
 	}
 }

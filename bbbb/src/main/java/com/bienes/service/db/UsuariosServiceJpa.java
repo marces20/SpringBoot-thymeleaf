@@ -41,6 +41,14 @@ public class UsuariosServiceJpa implements IUsuariosService {
 		return null;
 	}
 	
+	public Usuario buscarPorUserName(String userName) {
+		List<Usuario> optional = usuariosRepo.buscarPorUserName(userName);
+		if (!optional.isEmpty()) {
+			return optional.get(0);
+		}
+		return null;
+	}
+	
 	public void guardar(Usuario usuario) {
 		usuariosRepo.save(usuario);
 	}

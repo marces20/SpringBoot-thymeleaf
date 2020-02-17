@@ -1,6 +1,7 @@
 package com.bienes.service.db;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,16 @@ public class OrganigramaServiceJpa implements IOrganigramaService{
 	public List<Organigrama> findByNombre(String nombre) {
 		return organigramaRepo.findByNombreLikeIgnoreCase("%"+nombre+"%");
 	}
+
+	@Override
+	public Organigrama buscarPorId(Integer idOrganigrama) {
+		Optional<Organigrama> optional = organigramaRepo.findById(idOrganigrama);
+		if (optional.isPresent()) {
+			return optional.get();
+		}
+		return null;
+	}
+	
 	
 	
 }

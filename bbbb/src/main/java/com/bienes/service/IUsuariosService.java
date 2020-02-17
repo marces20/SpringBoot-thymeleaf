@@ -9,6 +9,8 @@ public interface IUsuariosService {
 
 	Usuario buscarPorId(Integer idUsuario);
 	
+	Usuario buscarPorUserName(String userName);
+	
 	void guardar(Usuario usuario);
 	
 	// Ejercicio: Método que elimina un usuario de la base de datos.

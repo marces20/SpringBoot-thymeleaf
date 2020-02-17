@@ -1,13 +1,18 @@
 package com.bienes.model;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -45,6 +50,10 @@ public class Expediente {
 	@ManyToOne
     @JoinColumn(name="organigrama_id", nullable=false)
 	private Organigrama organigrama;
+	 
+	
+	@OneToMany(cascade=CascadeType.ALL,mappedBy = "expediente", fetch = FetchType.LAZY)
+    private List<ExpedienteMovimiento> expedienteMovimiento;
 	
 	@ManyToOne
     @JoinColumn(name="create_user_id")
@@ -57,6 +66,9 @@ public class Expediente {
 	private Date write_date;
 	
 	
+	public Expediente() {
+		expedienteMovimiento = new ArrayList<ExpedienteMovimiento>();
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -116,6 +128,12 @@ public class Expediente {
 	}
 	public void setWrite_date(Date write_date) {
 		this.write_date = write_date;
+	}
+	public List<ExpedienteMovimiento> getExpedienteMovimiento() {
+		return expedienteMovimiento;
+	}
+	public void setExpedienteMovimiento(List<ExpedienteMovimiento> expedienteMovimiento) {
+		this.expedienteMovimiento = expedienteMovimiento;
 	}
 	
 	

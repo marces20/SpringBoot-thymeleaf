@@ -39,7 +39,6 @@ public class ExpedienteMovimiento {
 	@NotNull
 	private  Date fecha_llegada;
 	
-	@NotNull
 	private Date fecha_salida;
 	
 	private String descripcion;
@@ -118,6 +117,13 @@ public class ExpedienteMovimiento {
 
 	public void setCodigo(Integer codigo) {
 		this.codigo = codigo;
+	}
+
+	@Override
+	public String toString() {
+		return "ExpedienteMovimiento [id=" + id + ", organigrama=" + organigrama + ", usuario=" + usuario
+				+ ", expediente=" + expediente + ", fecha_llegada=" + fecha_llegada + ", fecha_salida=" + fecha_salida
+				+ ", descripcion=" + descripcion + ", cancelado=" + cancelado + ", codigo=" + codigo + "]";
 	} 
 	
 	
