@@ -17,7 +17,7 @@ div.autosuggest
 	background-position: top;
 	background-repeat: no-repeat;
 	padding: 10px 0 0 0;
-	z-index: 1000;
+	z-index: 9999;
 }
 
 div.autosuggest div.as_header,

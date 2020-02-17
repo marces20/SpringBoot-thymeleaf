@@ -310,27 +310,12 @@ _b.AutoSuggest.prototype.setSuggestions = function (req, input)
 	{	
 		var jsondata = eval('(' + req.responseText + ')');
 		
-		for (var i=0;i<jsondata.results.length;i++)
+		for (var i=0;i<jsondata.length;i++)
 		{	 					
-			this.aSug.push(  { 'id':jsondata.results[i].id, 'value':jsondata.results[i].value, 'info':jsondata.results[i].info, 'precio':jsondata.results[i].precio }  );
+			this.aSug.push(  { 'id':jsondata[i].id, 'value':jsondata[i].nombre, 'info':jsondata[i].info, 'precio':jsondata[i].precio }  );
 		}
 	}
-	else
-	{
-
-		var xml = req.responseXML;
-	
-		// traverse xml
-		//
-		var results = xml.getElementsByTagName('results')[0].childNodes;
-
-		for (var i=0;i<results.length;i++)
-		{
-			if (results[i].hasChildNodes())
-				this.aSug.push(  { 'id':results[i].getAttribute('id'), 'value':results[i].childNodes[0].nodeValue, 'info':results[i].getAttribute('info'), 'precio':results[i].getAttribute('precio') }  );
-		}
-	
-	}
+	 
 	
 	this.idAs = "as_"+this.fld.id;
 	
