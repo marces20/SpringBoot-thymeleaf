@@ -1,59 +1,149 @@
 
+<div class="modalPasarOtroServicio">
+	 
+   				<div th:replace="fragments/alertSucces :: alertSucces"></div>	
+   
+        
+  
+   				<form th:action="@{/expedientesmovimientos/save}" method="post" id="formPasarOtroServicio">
+	 
+		   		 	
+		   			 <div class="row">	
+					     <div class="col-sm-6">
+			                <div class="form-group">
+				                <label for="InputNombre">Servicio</label>
+				                
+			              		<input type="text" class="form-control orga2" name="organigrama.nombre" id="orga2" placeholder="Servicio" required="required">
+				                <input type="hidden" class="form-control" id="orga_id2" name="organigrama_id" required="required">
+			              	
+			              	</div>
+			             </div>
+			             <div class="col-sm-6">
+						     <div class="form-group">
+						       <label for="message-text" class="col-form-label">Descripcion:</label>
+						       <textarea class="form-control" name="descripcion" id="descripcion"></textarea>
+						     </div>
+					   	 </div>
+		             </div>
+		             <div class="row">	
+		             	
+			     	</div>
+			     	<div class="row">
+			     		<div class="col-sm-6">
+			     		<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+	     				<button type="submit" class="btn btn-primary">Guardar</button>
+	     				</div>	
+			     	</div>	
+		 
+	    
+   				</form>
+</div>   
+<script type="text/javascript">
 
-	<div class="modal-header">
-     <h5 class="modal-title" id="exampleModalLabel">New message</h5>
-     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-       <span aria-hidden="true">&times;</span>
-     </button>
-   </div>
-   <div class="modal-body">
-    	<div class="modal-body-insert">
-    		<form>
-		     <div class="col-sm-4">
-                <div class="form-group">
-	                <label for="InputNombre">Servicio</label>
-	                <input type="text" class="form-control" name="organigrama.nombre" id="organigrama" placeholder="Servicio" required="required">
-	                <input type="hidden" class="form-control" id="organigrama_id" name="organigrama" placeholder="Servicio" required="required">
-              	</div>
-             </div>
-		     <div class="form-group">
-		       <label for="message-text" class="col-form-label">Message:</label>
-		       <textarea class="form-control" id="message-text"></textarea>
-		     </div>
-		</form>
-   	</div>
-   </div>
-   <div class="modal-footer">
-     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-     <button type="button" class="btn btn-primary">Send message</button>
-   </div>
-   <script th:src="@{/plugins/jquery/jquery.min.js}"></script>
-   <script>
-$( function(){
-	$("#organigrama").autocomplete({
+$(function(){
 
-		source : function(request, response) {
-			$.ajax({
-				url : "/organigramas/suggest-organigrama/" + request.term,
-				dataType : "json",
-				data : {
-					term : request.term
-				},
-				success : function(data) {
-					response($.map(data, function(item) {
-						return {
-							value : item.id,
-							label : item.nombre
-						};
-					}));
-				},
-			});
-		},
-		select : function(event, ui) {
-			$("#organigrama").val(ui.item.label);
-			$("#organigrama_id").val(ui.item.value);
+	$( "#orga2" ).autocomplete({
+	  source: function( request, response ) {
+	   // Fetch data
+		   $.ajax({
+		    url: "/organigramas/suggest-organigrama/"+request.term,
+		    type: 'get',
+		    dataType: "json",
+		    data: {},
+		    success: function( data ) {
+		    	response($.map(data, function (item) {
+                    return {
+                        //Indicamos el Valor
+                        value: item.nombre,
+                        //el Label si lo desean
+                       // label: item.Nombre,
+                        //y el ID
+                        id: item.id
+                    }
+                }))
+		    }
+		   });
+	  },
+	  select: function (event, ui) {
+	   		// Set selection
+		   $('#orga2').val(ui.item.value); // display the selected text
+		   $('#orga_id2').val(ui.item.id); // save selected id to input
+		   return false;
+	  }
 
-			return false;
+	}); 
+}); 
+	
+ 
+   
+   
+   
+$(document).on("submit", '#formPasarOtroServicio', function(){
+	 
+    if($('#orga_id2').val().length == 0){
+    	alert('Debe seleccionar un servicio.')
+    	return false;
+    }
+	var form = $(this);
+	var url = form.attr('action');
+	var str = $("#formPasarOtroServicio").serialize();
+	var submit = form.find("button[type='submit']");
+	
+    if($('#id').val().length > 0){
+    	str += '&expediente_id='+$('#id').val();
+	}else{
+		if($("input[name='check_listado[]']").length > 0){
+			str += '&'+$("input[name='check_listado[]']").serialize()
 		}
+	}
+ 
+    submit.replaceWith(getLoading()); 
+	$.ajax({
+        type:"post",
+        data:str,
+        url:url,
+        
+        success: function(data){
+        	 
+        	$('.modalPasarOtroServicio').replaceWith(data);
+        },
+        error : function(data) {
+        	 
+        	$('.modalPasarOtroServicio').replaceWith(data);
+        	 /*if (jqXHR.status === 0) {
+
+                 alert('Not connect: Verify Network.');
+
+               } else if (jqXHR.status == 404) {
+
+                 alert('Requested page not found [404]');
+
+               } else if (jqXHR.status == 500) {
+
+                 alert('Internal Server Error [500].');
+
+               } else if (textStatus === 'parsererror') {
+
+                 alert('Requested JSON parse failed.');
+
+               } else if (textStatus === 'timeout') {
+
+                 alert('Time out error.');
+
+               } else if (textStatus === 'abort') {
+
+                 alert('Ajax request aborted.');
+
+               } else {
+
+                 alert('Uncaught Error: ' + jqXHR.responseText);
+
+               }*/
+           }
+    }); 
+	 
+	
+	return false;
 });
-</script> 
+</script>
+   
