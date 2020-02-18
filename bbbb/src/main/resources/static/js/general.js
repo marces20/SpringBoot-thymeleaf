@@ -7,6 +7,10 @@ $(function(){
 		window.location.href = $(this).closest('tr').attr('href');
 	}); 
 	
+	$('#checkAll').change( function(){
+		var table = $(this).closest('table');
+		table.find("input[name='check_listado[]']").prop("checked", $(this).prop( "checked" ) );
+	});
 		/*$('#exampleModal').on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var url = button.data('url');

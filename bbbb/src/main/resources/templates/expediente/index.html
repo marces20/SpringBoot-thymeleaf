@@ -41,15 +41,16 @@
 				                    <input type="text" class="form-control" name="nombre" id="orga" placeholder="Nombre">
 				                  </div>
 			                    </div>
-			                    
-			                     
 			                    <div class="col-sm-2">
 			                    	<div class="form-group">
-				                    <button type="submit" class="btn btn-primary">Buscar</button>
-				                    <a th:href="@{/expedientes/index}" class="btn btn-block btn-default" role="button" title="Limpiar">
-			                      		  Limpiar
-			                      	</a>
-				                    
+			                    		<label for="InputNombre">&nbsp;</label>
+				                    	<button type="submit" class="btn btn-block btn-primary"><i class="fas fa-search"></i> Buscar</button>
+				                  	</div>
+			                    </div> 
+			                    <div class="col-sm-2">
+			                    	<div class="form-group">
+			                    		<label for="InputNombre">&nbsp;</label>
+				                    	<a th:href="@{/expedientes/index}" class="btn btn-block btn-default" role="button" title="Limpiar">Limpiar</a>
 				                  </div>
 			                    </div>
 			             	 </div>		
@@ -61,39 +62,40 @@
 		                 <table id="example1" class="table table-striped table-bordered dataTable">
 		                    <thead>
 		                    <tr>
-		                      <th>#</th>	
+		                      <th  width="30"><input type="checkbox" name="checkAll" id="checkAll"/></th>  	
+		                      <th  width="30">#</th>	
 		                      <th>Codigo</th> 
 		                      <th>Nombre</th>
 		                      <th>Fecha</th>
 		                      <th>Ejercicio</th>	
 		                      <th>Iniciador</th>
-		                      <th></th>
+		                      <th  width="30"></th>
 		                    </tr>
 		                    </thead>
 		                    <tbody>
 		                    
-		                  o.estado_id" data-href="@controllers.contabilidad.routes.PagosController.ver(pago.id)&@UriTrack.encode()"
 		                    
 			                    <tr th:each="expediente : ${expedientes}" class="pointer" th:href="@{/expedientes/show/{id} (id=${expediente.id}) }">
-			                      <td class="notSeleccion"></td>	
+			                      <td class="notSeleccion">
+			                      	<input type="checkbox" name="check_listado[]" th:value="${expediente.id}" class="notSeleccion" id="check-"/>
+			                      </td>	
+			                      <td class="notSeleccion">
+			                      		<a th:href="@{/expedientes/edit/{id} (id=${expediente.id}) }" 
+			                      		class="btn btn-success btn-sm notSeleccion" 
+			                      		role="button" title="Editar el registro.">
+			                      		<i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+			                      </td>
 			                      <td th:text="${expediente.organigrama.codigo_expediente}"></td>
 			                      <td th:text="${expediente.nombre}"></td>
 			                      <td th:text="${#dates.format(expediente.fecha, 'dd/MM/yyyy')}"></td>
-			                      
 			                      <td th:text="${expediente.ejercicio.nombre}"></td>
 			                      <td th:text="${expediente.iniciador.nombre}"></td>
-			                      
 			                      <td class="notSeleccion">
-			                      	<a th:href="@{/expedientes/delete/{id} (id=${expediente.id}) }" 
+			                      		<a th:href="@{/expedientes/delete/{id} (id=${expediente.id}) }" 
 			                      		onclick="return confirm('¿Estas seguro?')" 
-			                      		class="btn btn-danger btn-sm" role="button" title="Eliminar">
+			                      		class="btn btn-danger btn-sm notSeleccion" role="button" title="Eliminar">
 			                      		<i class="fas fa-trash" aria-hidden="true"></i>
-			                      	</a>
-			                      	 
-			                      	<a th:href="@{/expedientes/edit/{id} (id=${expediente.id}) }" 
-			                      		class="btn btn-success btn-sm" 
-			                      		role="button" title="Editar el registro.">
-			                      		<i class="fas fa-pencil-alt" aria-hidden="true"></i></a>
+			                      		</a>
 			                      </td>
 			                    </tr>
 		                    </tbody>
