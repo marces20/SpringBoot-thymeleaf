@@ -25,6 +25,7 @@ import org.springframework.security.core.Authentication;
 import com.bienes.model.Expediente;
 import com.bienes.model.ExpedienteMovimiento;
 import com.bienes.service.IEjercicioService;
+import com.bienes.service.IExpedienteMovimientoService;
 import com.bienes.service.IExpedienteService;
 import com.bienes.util.PageRender; 
 
@@ -34,6 +35,9 @@ public class ExpedientesController {
 	
 	@Autowired
 	private IExpedienteService serviceExpedientes;
+	
+	@Autowired
+	private IExpedienteMovimientoService serviceExpedienteMovimientos;
 	
 	@Autowired
 	private IEjercicioService serviceEjercicio;
@@ -62,6 +66,8 @@ public class ExpedientesController {
 	@GetMapping("/create")
 	public String crear(@ModelAttribute Expediente expediente, Model model) {	
 		model.addAttribute("disabled", false);
+		
+		
 		return "expediente/form";
 	}
 	
@@ -70,12 +76,19 @@ public class ExpedientesController {
 		Expediente expediente = serviceExpedientes.buscarPorId(idExpediente);		
 		model.addAttribute("expediente", expediente);
 		model.addAttribute("disabled", false);
+		
+		ExpedienteMovimiento ultimoMovimiento = serviceExpedienteMovimientos.getLastMovimiento(expediente);
+		model.addAttribute("ultimoMovimiento", ultimoMovimiento);
+		
 		return "expediente/form";
 	}
 	
 	@GetMapping("/show/{id}")
 	public String show(@PathVariable("id") int idExpediente, Model model) {		
-		Expediente expediente = serviceExpedientes.buscarPorId(idExpediente);			
+		Expediente expediente = serviceExpedientes.buscarPorId(idExpediente);	
+		ExpedienteMovimiento ultimoMovimiento = serviceExpedienteMovimientos.getLastMovimiento(expediente);
+		
+		model.addAttribute("ultimoMovimiento", ultimoMovimiento);
 		model.addAttribute("expediente", expediente);
 		model.addAttribute("disabled", true);
 		return "expediente/form";

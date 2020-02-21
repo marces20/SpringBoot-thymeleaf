@@ -1,5 +1,6 @@
 package com.bienes.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
@@ -22,7 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Expedientes")
-public class Expediente {
+public class Expediente implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "expedientes_seq_gen")
@@ -53,6 +55,7 @@ public class Expediente {
 	 
 	
 	@OneToMany(cascade=CascadeType.ALL,mappedBy = "expediente", fetch = FetchType.LAZY)
+	@OrderBy("id DESC")
     private List<ExpedienteMovimiento> expedienteMovimiento;
 	
 	@ManyToOne
@@ -136,7 +139,10 @@ public class Expediente {
 		this.expedienteMovimiento = expedienteMovimiento;
 	}
 	
-	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	 
 }

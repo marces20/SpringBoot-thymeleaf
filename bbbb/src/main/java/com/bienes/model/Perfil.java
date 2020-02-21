@@ -1,5 +1,7 @@
 package com.bienes.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +11,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Perfiles")
-public class Perfil {
+public class Perfil implements Serializable {
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "perfiles_seq_gen")
@@ -37,4 +40,10 @@ public class Perfil {
 	public String toString() {
 		return "Perfil [id=" + id + ", perfil=" + nombre + "]";
 	}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 }

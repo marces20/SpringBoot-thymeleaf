@@ -3,3 +3,17 @@
 .pointer{
 	cursor: pointer;
 }
+
+.input-group-addon {
+	
+	padding:11px 5px; 
+	font-size: 13px;
+	font-weight: normal;
+    line-height: 1;
+    text-align: center;
+    background-color: #eee;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    border-top:1px solid #ccc;
+     
+}

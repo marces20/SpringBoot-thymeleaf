@@ -1,5 +1,6 @@
 package com.bienes.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,7 +12,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "Ejercicios")
-public class Ejercicio {
+public class Ejercicio implements Serializable {
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "ejercicios_seq_gen")
@@ -47,5 +49,9 @@ public class Ejercicio {
 		this.fecha_fin = fecha_fin;
 	}
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 }

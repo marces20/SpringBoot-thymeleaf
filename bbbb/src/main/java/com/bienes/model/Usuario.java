@@ -1,5 +1,6 @@
 package com.bienes.model;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,9 +18,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity
 @Table(name = "Usuarios")
-public class Usuario {
+public class Usuario implements Serializable {
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "users_seq_gen")
@@ -95,4 +101,16 @@ public class Usuario {
 	public void setPerfiles(List<Perfil> perfiles) {
 		this.perfiles = perfiles;
 	}
+	public Organigrama getOrganigrama() {
+		return organigrama;
+	}
+	public void setOrganigrama(Organigrama organigrama) {
+		this.organigrama = organigrama;
+	}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 }

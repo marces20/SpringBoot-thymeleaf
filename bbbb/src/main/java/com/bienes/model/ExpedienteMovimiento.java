@@ -1,5 +1,6 @@
 package com.bienes.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -12,10 +13,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.bienes.util.DateUtils;
+
 @Entity
 @Table(name = "expedientes_movimientos")
-public class ExpedienteMovimiento {
+public class ExpedienteMovimiento implements Serializable {
 	
+	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "expedientes_movimiento_seq_gen")
 	@SequenceGenerator(name = "expedientes_movimiento_seq_gen", sequenceName = "expedientes_movimientos_id_seq",allocationSize=1)
@@ -126,5 +131,21 @@ public class ExpedienteMovimiento {
 				+ ", descripcion=" + descripcion + ", cancelado=" + cancelado + ", codigo=" + codigo + "]";
 	} 
 	
+	public String getTiempoEnMovimiento(){
+		String r = "";
+		
+		if(getFecha_salida() != null){
+			r = DateUtils.restarDates(getFecha_llegada(), getFecha_salida());
+		}else{
+			r = DateUtils.restarDates(getFecha_llegada(), new Date());
+		}
+		
+		return r;
+	}
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 }

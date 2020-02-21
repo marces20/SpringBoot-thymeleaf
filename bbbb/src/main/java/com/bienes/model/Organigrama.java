@@ -1,5 +1,7 @@
 package com.bienes.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,7 +11,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "organigramas")
-public class Organigrama {
+public class Organigrama implements Serializable {
+	
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "organigramas_seq_gen")
@@ -53,5 +56,9 @@ public class Organigrama {
 		this.padre_id = padre_id;
 	}
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 }
