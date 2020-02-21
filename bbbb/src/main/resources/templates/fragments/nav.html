@@ -30,7 +30,9 @@
 	          <img th:src="@{/img/avatar04.png}" class="img-circle elevation-2" alt="User Image">
 	        </div>
 	        <div class="info">
-	          <a href="#" class="d-block">Marcos Villamil</a>
+	          	<div sec:authorize="isAuthenticated()">
+	        		<a href="#" class="d-block" sec:authentication="name"></a>
+      			</div>	
 	        </div>
 	      </div>
 	
