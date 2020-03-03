@@ -24,6 +24,59 @@ $(function(){
 		   
 		})*/
 		
+		$(document).on('click', '#cancelarPaseExpediente', function(){
+			var str = "";
+			if($('#id').val().length > 0){
+		    	str += 'expediente_id='+$('#id').val();
+			}else{
+				if($("input[name='check_listado[]']").length > 0){
+					str += $("input[name='check_listado[]']").serialize()
+				}
+			}
+			
+			var url = $(this).attr('data-url');
+			var mensaje = "¿Confirma que desea cancelar el pase?";
+			
+			if(confirm(mensaje)){
+				$this = $(this);
+				
+				$.get(url,str ,function(data){
+					if(data.success){
+						location.reload();
+					} else {
+						alert(data.error);
+					}
+				});
+			}
+			return false;
+		});
+		
+		$(document).on('click', '#asignarAMiServicioExpediente', function(){
+			var str = "";
+			if($('#id').val().length > 0){
+		    	str += 'expediente_id='+$('#id').val();
+			}else{
+				if($("input[name='check_listado[]']").length > 0){
+					str += $("input[name='check_listado[]']").serialize()
+				}
+			}
+			
+			var url = $(this).attr('data-url');
+			var mensaje = "¿Confirma asignarse el expediente?";
+			
+			if(confirm(mensaje)){
+				$this = $(this);
+				
+				$.get(url,str ,function(data){
+					if(data.success){
+						location.reload();
+					} else {
+						alert(data.error);
+					}
+				});
+			}
+			return false;
+		});
 		
 		$('#reportePaseExpediente').click( function() { //abrir modal para mostrar mensaje informe rentas
 			 
@@ -40,10 +93,13 @@ $(function(){
 		        buttons: {
 			          Cerrar: function() {
 			            $( this ).dialog( "destroy" );
+			            location.reload();
 			          }
 			    },
 		    	close: function(event, ui ){
 		    		$(this).dialog( "destroy" );
+		    		location.reload();
+		    		
 		    	},
 			    open: function( event, ui ) {
 					$.get(url,  function(data){
