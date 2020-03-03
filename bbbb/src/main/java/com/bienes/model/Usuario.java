@@ -108,6 +108,8 @@ public class Usuario implements Serializable {
 		this.organigrama = organigrama;
 	}
 	
+	
+	
 	/**
 	 * 
 	 */

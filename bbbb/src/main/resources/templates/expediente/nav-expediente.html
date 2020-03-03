@@ -14,10 +14,9 @@
 	      </li> 
 	       
 	    </ul>
-	    <ul class="navbar-nav ml-auto">
-	    	<li class="nav-item d-none d-sm-inline-block">
-	      		<a class="nav-link" th:href="@{/expedientes/create}" title="Crear nuevo usuario" role="button">Nuevo Expediente <i class="fas fa-book" aria-hidden="true"></i></a>  
-		    </li>
+	    <ul class="navbar-nav ml-auto" th:if=${disabled}>
+	    	
+	    	
 		     
 	    	<li class="nav-item dropdown">
 			    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Acciones</a>
@@ -26,8 +25,12 @@
 			      									data-title="Pasar a otro Servicio"
 			      									data-url="/expedientes/modalPasarOtroServicio">Pasar a Otro Servicio</a>
 			      			   
-			      <a class="dropdown-item" href="#">Cancelar Pase</a>
-			      <a class="dropdown-item" href="#">Asignar a mi Servicio</a> 
+			      <a class="dropdown-item" id="cancelarPaseExpediente" 
+			      						   href="#"   
+			      						   data-url="/expedientesmovimientos/cancelar">Cancelar Pase</a>
+			      <a class="dropdown-item" id="asignarAMiServicioExpediente" 
+			      						   href="#"   
+			      						   data-url="/expedientesmovimientos/asignaramiservicio">Asignar a mi Servicio</a> 
 			     
 			    </div>
 		  	</li>
@@ -36,9 +39,12 @@
 		   <li class="nav-item dropdown">
 			    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Reportes</a>
 			    <div class="dropdown-menu">
-			       <a class="dropdown-item" href="#">Imprimir Tapa</a>
+			       <a th:if="${expediente != null}" class="dropdown-item" target="_blank" th:href="@{'/expedientesmovimientos/ver/'+${expediente.id}}">Imprimir Ultimo Movimiento</a>
 			    </div>
 		  	</li>
+		  	<li class="nav-item d-none d-sm-inline-block">
+	      		<a class="nav-link" th:href="@{/expedientes/create}" title="Crear nuevo usuario" role="button">Nuevo Expediente <i class="fas fa-book" aria-hidden="true"></i></a>  
+		    </li>
 	    </ul>
 	  </nav>
 	  <!-- /.navbar HEADERRRRRRRRRRRRRRRRRRRRRRRRRR -->
@@ -69,7 +75,7 @@
 	
 	      <!-- Sidebar Menu -->
 	      <nav class="mt-2">
-	        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+	        <ul class="nav nav-pills nav-sidebar flex-column text-sm" data-widget="treeview" role="menu" data-accordion="false">
 	          <!-- Add icons to the links using the .nav-icon class
 	               with font-awesome or any other icon font library -->
 	          <li class="nav-item has-treeview menu-open">

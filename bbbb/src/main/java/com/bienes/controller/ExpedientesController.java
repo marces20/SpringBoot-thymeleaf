@@ -27,6 +27,7 @@ import com.bienes.model.ExpedienteMovimiento;
 import com.bienes.service.IEjercicioService;
 import com.bienes.service.IExpedienteMovimientoService;
 import com.bienes.service.IExpedienteService;
+import com.bienes.service.IUsuariosService;
 import com.bienes.util.PageRender; 
 
 @Controller
@@ -41,6 +42,9 @@ public class ExpedientesController {
 	
 	@Autowired
 	private IEjercicioService serviceEjercicio;
+	
+	@Autowired
+	private IUsuariosService serviceUsuario;
 	
 	@GetMapping("/index")
 	public String mostrarIndex(
@@ -59,15 +63,13 @@ public class ExpedientesController {
 		model.addAttribute("titulo", "Listado de expedientes");
 		model.addAttribute("expedientes", expedientes);
 		model.addAttribute("page", pageRender);
-		
+		model.addAttribute("disabled", true);
 		return "expediente/index";
 	}
 	
 	@GetMapping("/create")
 	public String crear(@ModelAttribute Expediente expediente, Model model) {	
 		model.addAttribute("disabled", false);
-		
-		
 		return "expediente/form";
 	}
 	
@@ -78,7 +80,7 @@ public class ExpedientesController {
 		model.addAttribute("disabled", false);
 		
 		ExpedienteMovimiento ultimoMovimiento = serviceExpedienteMovimientos.getLastMovimiento(expediente);
-		model.addAttribute("ultimoMovimiento", ultimoMovimiento);
+		model.addAttribute("ultimoMovimiento", (ultimoMovimiento != null)?ultimoMovimiento.getOrganigrama().getNombre():"");
 		
 		return "expediente/form";
 	}
@@ -88,7 +90,7 @@ public class ExpedientesController {
 		Expediente expediente = serviceExpedientes.buscarPorId(idExpediente);	
 		ExpedienteMovimiento ultimoMovimiento = serviceExpedienteMovimientos.getLastMovimiento(expediente);
 		
-		model.addAttribute("ultimoMovimiento", ultimoMovimiento);
+		model.addAttribute("ultimoMovimiento", (ultimoMovimiento != null)?ultimoMovimiento.getOrganigrama().getNombre():"");
 		model.addAttribute("expediente", expediente);
 		model.addAttribute("disabled", true);
 		return "expediente/form";
@@ -104,19 +106,34 @@ public class ExpedientesController {
 		}	
 		
 		try {
+			boolean nuevo = false;
 			if(expediente.getId() == null) {
 				expediente.setCreate_date(new Date());
-				//expediente.setCreate_user(1);
+				expediente.setCreate_user(serviceUsuario.getUserLogged());
+				nuevo = true;
 			}else {
 				expediente.setWrite_date(new Date());
-				//expediente.setWrite_user(write_user);
+				expediente.setWrite_user(serviceUsuario.getUserLogged());
 			}
 			serviceExpedientes.guardar(expediente);
+			
+			if(expediente.getId() != null && nuevo) {
+				ExpedienteMovimiento em = new ExpedienteMovimiento();
+				
+				em.setUsuario(serviceUsuario.getUserLogged());
+				em.setOrganigrama(serviceUsuario.getUserLogged().getOrganigrama());
+				em.setExpediente(expediente);
+				em.setFecha_llegada(new Date());
+				em.setCancelado(false);
+				
+				serviceExpedienteMovimientos.guardar(em);
+			}
+			
 			attributes.addFlashAttribute("msgsuccess", "Los datos del expediente fueron guardados!");
-			return "redirect:/expedientes/index";
+			return "redirect:/expedientes/show/"+expediente.getId();
 		} catch (Exception e) {
 			attributes.addFlashAttribute("msgalert", "Error no se ha podido guardar el expediente."+e);
-			return "redirect:/expedientes/index";
+			return "expediente/form";
 		}	
 	}
 	

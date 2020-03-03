@@ -16,7 +16,7 @@
 	   				<h1 class="m-0 text-dark">EXPEDIENTES</h1>
 	   			</div>	
 	   			<div class="col-sm-4">	
-	   				<span th:text="${ultimoMovimiento.getOrganigrama().getNombre()}"></span>
+	   				<span th:text="${ultimoMovimiento}"></span>
 	   			</div>
    			</div>
    			</div> 
@@ -146,16 +146,25 @@
 				                      <th>Fecha Llegada</th>
 				                      <th>Fecha Salida</th>
 				                      <th>Tiempo Servicio</th>
+				                      <th></th>
+				                      <th>#</th>
 			            			</tr>
 				                    </thead>
 				                    <tbody>
-					                    <tr th:each="em : ${expediente.expedienteMovimiento}">
+					                    <tr  th:class="${em.isCancelado()} ? 'cancelado' : ''" th:each="em : ${expediente.expedienteMovimiento}">
 					                    	<td></td>
 			                      			<td th:text="${em.organigrama.nombre}"></td>
 			                      			<td th:text="${em.usuario.nombre}"></td>
 			                      			<td th:text="${#dates.format(em.fecha_llegada, 'dd/MM/yyyy HH:mm')}"></td>
 			                      			<td th:text="${#dates.format(em.fecha_salida, 'dd/MM/yyyy HH:mm')}" ></td>
 			                      			<td th:text="${em.getTiempoEnMovimiento()}"></td>
+			                      			<td th:text="${em.isCancelado()} ? 'CANCELADO' : ''"></td>
+			                      			<td>
+			                      				<div th:if="${em.descripcion != null}">
+			                      				<div class='tip-top pointer' style="display: inline;" th:title="${em.descripcion}">
+												<i class="fas fa-list-alt"></i></div>
+												</div>
+			                      			</td>
 					                    </tr>
 				                    </tbody>
 				                  </table>
