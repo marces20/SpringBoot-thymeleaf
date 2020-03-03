@@ -24,4 +24,5 @@ public interface IUsuariosService {
 	//List<Usuario> findUsuarioTodo(String username);
 	Page<Usuario> findUsuarioTodo(String username,String nombre,Integer estatus,Pageable pageable);
 
+	Usuario getUserLogged();
 }
