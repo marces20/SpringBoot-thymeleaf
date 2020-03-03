@@ -22,7 +22,10 @@ import com.bienes.model.Usuario;
 import com.bienes.repository.UsuariosRepository; 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable; 
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails; 
 
 @Service
 public class UsuariosServiceJpa implements IUsuariosService {
@@ -119,6 +122,17 @@ public class UsuariosServiceJpa implements IUsuariosService {
         return new PageImpl<Usuario>(typedQuery.getResultList(), pageable,total);
          
     }
+	
+	public Usuario getUserLogged() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		if(userDetails.getUsername() != null) {
+			return buscarPorUserName(userDetails.getUsername());
+		}else {
+			return null;
+		}
+	}
+	
 	
 }	
 

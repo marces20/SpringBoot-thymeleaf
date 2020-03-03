@@ -53,7 +53,12 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 
 	@Override
 	public ExpedienteMovimiento getLastMovimiento(Expediente expediente) {
-		return expeMoviRepo.getLastMovimiento(expediente).get(0);
+		List<ExpedienteMovimiento> r = expeMoviRepo.getLastMovimiento(expediente);
+		if(r.size() > 0) {
+			return r.get(0);
+		}else {
+			return null;
+		}
 	}
 
 	@Override
@@ -73,8 +78,11 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 	}
 
 	@Override
-	public ExpedienteMovimiento getMovimientoAnterior(ExpedienteMovimiento expedienteMovimiento) {	
+	public ExpedienteMovimiento getMovimientoAnterior(ExpedienteMovimiento expedienteMovimiento){	
+		System.out.println("111111111111-------------"+expedienteMovimiento.getId());
+		System.out.println("222222222-------------"+expedienteMovimiento.getExpediente());
 		List<ExpedienteMovimiento> r = expeMoviRepo.getMovimientoAnterior(expedienteMovimiento.getId(), expedienteMovimiento.getExpediente());
+		System.out.println("33333333-------------"+r.size());
 		if(r.size() > 0) {
 			return r.get(0);
 		}else {
@@ -87,7 +95,7 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 		 
 		ExpedienteMovimiento e = getLastMovimiento(expediente);
 		 
-		if(e.getOrganigrama().getId().equals(idOrga)) {
+		if(e != null && e.getOrganigrama().getId().equals(idOrga)) {
 			return true;
 		}
 		return false;
