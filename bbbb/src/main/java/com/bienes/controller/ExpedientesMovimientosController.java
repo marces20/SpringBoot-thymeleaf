@@ -1,7 +1,9 @@
 package com.bienes.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.persistence.RollbackException;
@@ -33,6 +35,7 @@ import com.bienes.service.IExpedienteMovimientoService;
 import com.bienes.service.IExpedienteService;
 import com.bienes.service.IOrganigramaService;
 import com.bienes.service.IUsuariosService;
+import com.bienes.util.ArrayUtils;
 import com.bienes.view.pdf.ExpedienteMovimientoPdfView;
 
 @Controller
@@ -254,98 +257,113 @@ public class ExpedientesMovimientosController {
 		ModelAndView modelAndView = new ModelAndView("expediente/modal/pasarOtroServicio");
 	     
 		try {
-			if(result.getParameter("id") == null) {
-				boolean error = false;
-				String errorStr = "";
-				Expediente e = null;
-				if(result.getParameter("expediente_id") != null) {
-					
-					e = serviceExpediente.buscarPorId(new Integer(result.getParameter("expediente_id")));
-					if(e == null) {
-						error =true;
-						errorStr += "No se puede seleccionar el Expediente";
-					}
-				}else {
-					error =true;
-					errorStr += "No se puede seleccionar el Expediente";
-				}
-				 
-				
-				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-				UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-				Usuario u = null;
-				if(userDetails.getUsername() != null) {
-					 u = serviceUsuario.buscarPorUserName(userDetails.getUsername());
-					 if(u == null) {
-						 errorStr += "No se puede seleccionar el Usuario.";
-						 error =true;
-					 }else {
-						 
-						 Integer idOrgaUsuario  = u.getOrganigrama().getId();
-						  
-						 
-						 if(!serviceExpeMovimiento.isLastMovimientoServicioUsuario(e,idOrgaUsuario)) {
-							 
-							errorStr += "El expediente no se encuentra en el servicio del Usuario.";
-							error =true;
-						 }
-					 }
-				}else {
-					error =true;
-					errorStr += "No se puede seleccionar el Usuario.";
-				}
-				
-				
-				
-				Organigrama o = null;
-				if(!result.getParameter("organigrama_id").isEmpty() && result.getParameter("organigrama_id") != null) {
-					
-					o = serviceOrganigrama.buscarPorId(new Integer(result.getParameter("organigrama_id")));
-					if(o == null) {
-						errorStr += "No se puede seleccionar el Servicio.";
-						error =true;
-					}
-				}else {
-					errorStr += "No se puede seleccionar el Servicio.";
-					error =true;
-				}
-				
-				 
-				if(!error) {
-					
-					System.out.print("--------------------"+result.toString());
-					
-					ExpedienteMovimiento em = new ExpedienteMovimiento();
-					
-					em.setUsuario(u);
-					em.setOrganigrama(o);
-					em.setExpediente(e);
-					em.setDescripcion(result.getParameter("descripcion"));
-					em.setFecha_llegada(new Date());
-					em.setCancelado(false);
-					
-					serviceExpeMovimiento.guardar(em);
-					
-					ExpedienteMovimiento ma = serviceExpeMovimiento.getMovimientoAnterior(em); //ExpedienteMovimiento.getMovimientoAnterior(f);
-					if(ma != null){
-						ma.setFecha_salida(new Date());
-						serviceExpeMovimiento.guardar(ma);
-					}
-					
-					
-					
-					modelAndView.addObject("expediente", e);
-					modelAndView.addObject("msgsuccess", "Los datos del movimiento fueron guardados!");
-				}else {
-					modelAndView.addObject("msgalert", errorStr);
-				}
-						
-				
-				 
+			List<Integer> ids = new ArrayList<Integer>();
+			
+			if(result.getParameter("expediente_id") != null) {
+				ids.add(new Integer(result.getParameter("expediente_id")));
+			}else if(result.getParameter("check_listado[]") != null && result.getParameterValues("check_listado[]").length > 0) {
+				ids = ArrayUtils.getSeleccionados(result.getParameterValues("check_listado[]"));
+			}else {
+				modelAndView.addObject("msgalert", "No se puede determinar el Expediente.");
+				return modelAndView;
 			}
 			
 			
-		    return modelAndView;
+			boolean error = false;
+			String errorStr = "";
+			Expediente e = null;
+			if(result.getParameter("expediente_id") != null) {
+				
+				e = serviceExpediente.buscarPorId(new Integer(result.getParameter("expediente_id")));
+				if(e == null) {
+					error =true;
+					errorStr += "No se puede seleccionar el Expediente1";
+					modelAndView.addObject("msgalert", errorStr);
+					return modelAndView;
+				}
+			}else {
+				error =true;
+				errorStr += "No se puede seleccionar el Expediente2";
+				modelAndView.addObject("msgalert", errorStr);
+				return modelAndView;
+			}
+			 
+			
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			Usuario u = null;
+			if(userDetails.getUsername() != null) {
+				 u = serviceUsuario.buscarPorUserName(userDetails.getUsername());
+				 if(u == null) {
+					 errorStr += "No se puede seleccionar el Usuario.";
+					 error =true;
+				 }else {
+					 
+					 Integer idOrgaUsuario  = u.getOrganigrama().getId();
+					  
+					 
+					 if(!serviceExpeMovimiento.isLastMovimientoServicioUsuario(e,idOrgaUsuario)) {
+						 
+						errorStr += "El expediente no se encuentra en el servicio del Usuario.";
+						error =true;
+					 }
+				 }
+			}else {
+				error =true;
+				errorStr += "No se puede seleccionar el Usuario.";
+			}
+			
+			
+			
+			Organigrama o = null;
+			if(!result.getParameter("organigrama_id").isEmpty() && result.getParameter("organigrama_id") != null) {
+				
+				o = serviceOrganigrama.buscarPorId(new Integer(result.getParameter("organigrama_id")));
+				if(o == null) {
+					errorStr += "No se puede seleccionar el Servicio.";
+					error =true;
+				}
+			}else {
+				errorStr += "No se puede seleccionar el Servicio.";
+				error =true;
+			}
+			
+			 
+			if(!error) {
+				
+				System.out.print("--------------------"+result.toString());
+				
+				ExpedienteMovimiento em = new ExpedienteMovimiento();
+				
+				em.setUsuario(u);
+				em.setOrganigrama(o);
+				em.setExpediente(e);
+				em.setDescripcion(result.getParameter("descripcion"));
+				em.setFecha_llegada(new Date());
+				em.setCancelado(false);
+				
+				serviceExpeMovimiento.guardar(em);
+				
+				ExpedienteMovimiento ma = serviceExpeMovimiento.getMovimientoAnterior(em); //ExpedienteMovimiento.getMovimientoAnterior(f);
+				if(ma != null){
+					ma.setFecha_salida(new Date());
+					serviceExpeMovimiento.guardar(ma);
+				}
+				
+				
+				
+				modelAndView.addObject("expediente", e);
+				modelAndView.addObject("msgsuccess", "Los datos del movimiento fueron guardados!");
+			}else {
+				modelAndView.addObject("msgalert", errorStr);
+			}
+				
+			 
+			
+			
+		    return modelAndView;		
+		    
+				 
 			
 		} catch (RollbackException ex) {
 			System.out.print("-RollbackException-----"+ex.getMessage());
