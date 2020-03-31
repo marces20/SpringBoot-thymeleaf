@@ -48,16 +48,16 @@
 			                    <div class="input-group">
 				                    <input type="text" th:disabled="${disabled}" class="form-control" th:field="*{organigrama.nombre}" name="organigrama.nombre" id="organigrama" placeholder="Servicio" required="required">
 				                    <input type="hidden" th:disabled="${disabled}" th:field="*{organigrama.id}" class="form-control" id="organigrama_id" name="organigrama.id" placeholder="Servicio" required="required">
-				                  	<span class="input-group-addon">
+				                  	<span th:unless="${disabled}" class="input-group-addon">
 										<a href="#" class="searchModal"
-													id="searchPeriodo" 
-													data-title="Selección de Periodo" 
-													data-url="" 
+													id="searchOrganigrama" 
+													data-title="Selección de Organigrama" 
+													data-url="/organigramas/modalBuscar" 
 													data-height="650" 
 													data-width="700" 
-													data-listen="modal.seleccion.periodo.simple" 
-													data-label="#periodo" 
-													data-field="#periodo_id">
+													data-listen="modal.seleccion.organigrama.simple" 
+													data-label="#organigrama" 
+													data-field="#organigrama_id">
 											<i class="fas fa-search"></i>
 										</a>
 									</span>
@@ -160,7 +160,7 @@
 			                      			<td th:text="${em.getTiempoEnMovimiento()}"></td>
 			                      			<td th:text="${em.isCancelado()} ? 'CANCELADO' : ''"></td>
 			                      			<td>
-			                      				<div th:if="${em.descripcion != null}">
+			                      				<div th:if="${em.descripcion != null && !em.descripcion.isEmpty()}">
 			                      				<div class='tip-top pointer' style="display: inline;" th:title="${em.descripcion}">
 												<i class="fas fa-list-alt"></i></div>
 												</div>

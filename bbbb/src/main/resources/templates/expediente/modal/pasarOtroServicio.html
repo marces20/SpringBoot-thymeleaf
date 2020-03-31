@@ -39,7 +39,7 @@
 	   				</form>
    				</div> 
    				<div th:if="${msgsuccess != null}">
-   					<a th:if="${expediente != null}" class="btn btn-primary" target="_blank" th:href="@{'/expedientesmovimientos/ver/'+${expediente.id}}">Imprimir Ultimo Movimiento</a>
+   					<a th:if="${codigo != null}" class="btn btn-primary" target="_blank" th:href="@{'/expedientesmovimientos/ver/'+${codigo}}">Imprimir Ultimo Movimiento</a>
    				</div> 
 </div>   
 <script type="text/javascript">
@@ -93,15 +93,28 @@ $(document).on("submit", '#formPasarOtroServicio', function(){
 	var str = $("#formPasarOtroServicio").serialize();
 	var submit = form.find("button[type='submit']");
 	
-    if($('#id').val().length > 0){
-    	str += '&expediente_id='+$('#id').val();
-	}else{
-		if($("input[name='check_listado[]']").length > 0){
-			str += '&'+$("input[name='check_listado[]']").serialize()
+	 
+	
+    if($('#id').length > 0 || $("input[name='check_listado[]']").length > 0){ 
+	   	if($('#id').length > 0){
+	   		str += '&expediente_id='+$('#id').val();
+	   	}else{
+		
+			if($("input[name='check_listado[]']").length > 0){
+				if($("input[name='check_listado[]']:checked").length > 0){
+					str += '&'+$("input[name='check_listado[]']").serialize()
+				}else{
+					alert("Debe seleccionar Expedientes.")
+					return false;
+				}
+			}
 		}
-	}
- 	 
-    submit.replaceWith(getLoading()); 
+    }else{
+    	alert("Nose puede determinar el Expediente");
+		return false;
+    }
+    /*submit.replaceWith(getLoading());*/ 
+    
 	$.ajax({
         type:"post",
         data:str,
@@ -114,40 +127,43 @@ $(document).on("submit", '#formPasarOtroServicio', function(){
         error : function(data) {
         	 
         	$('.modalPasarOtroServicio').replaceWith(data);
-        	 /*if (jqXHR.status === 0) {
-
-                 alert('Not connect: Verify Network.');
-
-               } else if (jqXHR.status == 404) {
-
-                 alert('Requested page not found [404]');
-
-               } else if (jqXHR.status == 500) {
-
-                 alert('Internal Server Error [500].');
-
-               } else if (textStatus === 'parsererror') {
-
-                 alert('Requested JSON parse failed.');
-
-               } else if (textStatus === 'timeout') {
-
-                 alert('Time out error.');
-
-               } else if (textStatus === 'abort') {
-
-                 alert('Ajax request aborted.');
-
-               } else {
-
-                 alert('Uncaught Error: ' + jqXHR.responseText);
-
-               }*/
+        	 
            }
     }); 
 	 
 	
 	return false;
 });
+
+/*if (jqXHR.status === 0) {
+
+alert('Not connect: Verify Network.');
+
+} else if (jqXHR.status == 404) {
+
+alert('Requested page not found [404]');
+
+} else if (jqXHR.status == 500) {
+
+alert('Internal Server Error [500].');
+
+} else if (textStatus === 'parsererror') {
+
+alert('Requested JSON parse failed.');
+
+} else if (textStatus === 'timeout') {
+
+alert('Time out error.');
+
+} else if (textStatus === 'abort') {
+
+alert('Ajax request aborted.');
+
+} else {
+
+alert('Uncaught Error: ' + jqXHR.responseText);
+
+}*/
+
 </script>
    
