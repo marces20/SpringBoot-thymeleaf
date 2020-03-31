@@ -65,15 +65,15 @@ public class ExpedientesMovimientosController {
 		return "expediente/expedienteMovimiento";
 	}*/
 	
-	@GetMapping("/ver/{id}")
-    public ModelAndView report(@PathVariable(value = "id") Integer id) {
+	@GetMapping("/ver/{codigo}")
+    public ModelAndView report(@PathVariable(value = "codigo") Integer codigo) {
         
         Map<String, Object> model = new HashMap<>();
 
-        Expediente e = serviceExpediente.buscarPorId(id);
-		ExpedienteMovimiento um = serviceExpeMovimiento.getLastMovimiento(e);
+        
+		List<ExpedienteMovimiento> listMovimientos = serviceExpeMovimiento.getByCodigo(codigo);
 
-		model.put("expedienteMovimiento", um);
+		model.put("listMovimientos", listMovimientos);
 
         return new ModelAndView(new ExpedienteMovimientoPdfView(), model);
     }
@@ -106,17 +106,7 @@ public class ExpedientesMovimientosController {
 				 if(u == null) {
 					 errorStr += "No se puede seleccionar el Usuario.";
 					 error =true;
-				 }else {
-					 
-					 Integer idOrgaUsuario  = u.getOrganigrama().getId();
-					  
-					 
-					 if(!serviceExpeMovimiento.isLastMovimientoServicioUsuario(e,idOrgaUsuario)) {
-						 
-						errorStr += "El expediente no se encuentra en el servicio del Usuario.";
-						error =true;
-					 }
-				 }
+				 } 
 			}else {
 				error =true;
 				errorStr += "No se puede seleccionar el Usuario.";
@@ -124,6 +114,7 @@ public class ExpedientesMovimientosController {
 			
 			ExpedienteMovimiento um = serviceExpeMovimiento.getLastMovimiento(e);
 			ExpedienteMovimiento ma = null;
+			
 			if(um != null) {
 				
 				if(um.getUsuario().getId().compareTo(u.getId()) == 0) {
@@ -222,7 +213,7 @@ public class ExpedientesMovimientosController {
 				em.setDescripcion("AUTOASIGNACION");
 				em.setFecha_llegada(new Date());
 				em.setCancelado(false);
-				
+				em.setCodigo(serviceExpeMovimiento.getSecuenceCodigo());
 				serviceExpeMovimiento.guardar(em);
 				
 				ExpedienteMovimiento ma = serviceExpeMovimiento.getMovimientoAnterior(em); //ExpedienteMovimiento.getMovimientoAnterior(f);
@@ -271,20 +262,17 @@ public class ExpedientesMovimientosController {
 			
 			boolean error = false;
 			String errorStr = "";
-			Expediente e = null;
-			if(result.getParameter("expediente_id") != null) {
+			List<Expediente> listaExpedientes = null;
+			if(ids.size() > 0){
 				
-				e = serviceExpediente.buscarPorId(new Integer(result.getParameter("expediente_id")));
-				if(e == null) {
-					error =true;
-					errorStr += "No se puede seleccionar el Expediente1";
-					modelAndView.addObject("msgalert", errorStr);
+				listaExpedientes = serviceExpediente.buscarPorIds(ids);
+				if(listaExpedientes == null) {
+				 
+					modelAndView.addObject("msgalert", "No se puede seleccionar el Expediente");
 					return modelAndView;
 				}
-			}else {
-				error =true;
-				errorStr += "No se puede seleccionar el Expediente2";
-				modelAndView.addObject("msgalert", errorStr);
+			}else { 
+				modelAndView.addObject("msgalert", "No se puede seleccionar el Expediente");
 				return modelAndView;
 			}
 			 
@@ -295,22 +283,22 @@ public class ExpedientesMovimientosController {
 			if(userDetails.getUsername() != null) {
 				 u = serviceUsuario.buscarPorUserName(userDetails.getUsername());
 				 if(u == null) {
-					 errorStr += "No se puede seleccionar el Usuario.";
-					 error =true;
+					 modelAndView.addObject("msgalert", "No se puede seleccionar el Usuario.");
+					 return modelAndView;
 				 }else {
 					 
 					 Integer idOrgaUsuario  = u.getOrganigrama().getId();
 					  
-					 
-					 if(!serviceExpeMovimiento.isLastMovimientoServicioUsuario(e,idOrgaUsuario)) {
-						 
-						errorStr += "El expediente no se encuentra en el servicio del Usuario.";
-						error =true;
+					 for(Expediente e :listaExpedientes) {
+						 if(!serviceExpeMovimiento.isLastMovimientoServicioUsuario(e,idOrgaUsuario)) {
+							modelAndView.addObject("msgalert", "El expediente "+e.getNombreCompleto()+" no se encuentra en el servicio del Usuario.");
+							return modelAndView; 
+						 }
 					 }
 				 }
 			}else {
-				error =true;
-				errorStr += "No se puede seleccionar el Usuario.";
+				modelAndView.addObject("msgalert", "No se puede seleccionar el Usuario.");
+				return modelAndView;
 			}
 			
 			
@@ -319,40 +307,42 @@ public class ExpedientesMovimientosController {
 			if(!result.getParameter("organigrama_id").isEmpty() && result.getParameter("organigrama_id") != null) {
 				
 				o = serviceOrganigrama.buscarPorId(new Integer(result.getParameter("organigrama_id")));
-				if(o == null) {
-					errorStr += "No se puede seleccionar el Servicio.";
-					error =true;
+				if(o == null) { 
+					modelAndView.addObject("msgalert", "No se puede seleccionar el Servicio.");
+					return modelAndView;
 				}
 			}else {
-				errorStr += "No se puede seleccionar el Servicio.";
-				error =true;
+				modelAndView.addObject("msgalert", "No se puede seleccionar el Servicio.");
+				return modelAndView;
 			}
 			
 			 
 			if(!error) {
+				Integer codigo = serviceExpeMovimiento.getSecuenceCodigo();
 				
-				System.out.print("--------------------"+result.toString());
-				
-				ExpedienteMovimiento em = new ExpedienteMovimiento();
-				
-				em.setUsuario(u);
-				em.setOrganigrama(o);
-				em.setExpediente(e);
-				em.setDescripcion(result.getParameter("descripcion"));
-				em.setFecha_llegada(new Date());
-				em.setCancelado(false);
-				
-				serviceExpeMovimiento.guardar(em);
-				
-				ExpedienteMovimiento ma = serviceExpeMovimiento.getMovimientoAnterior(em); //ExpedienteMovimiento.getMovimientoAnterior(f);
-				if(ma != null){
-					ma.setFecha_salida(new Date());
-					serviceExpeMovimiento.guardar(ma);
+				for(Expediente e :listaExpedientes) {
+					
+					ExpedienteMovimiento em = new ExpedienteMovimiento();
+					
+					em.setUsuario(u);
+					em.setOrganigrama(o);
+					em.setExpediente(e);
+					em.setDescripcion(result.getParameter("descripcion"));
+					em.setFecha_llegada(new Date());
+					em.setCancelado(false);
+					em.setCodigo(codigo);
+					serviceExpeMovimiento.guardar(em);
+					
+					ExpedienteMovimiento ma = serviceExpeMovimiento.getMovimientoAnterior(em); //ExpedienteMovimiento.getMovimientoAnterior(f);
+					if(ma != null){
+						ma.setFecha_salida(new Date());
+						serviceExpeMovimiento.guardar(ma);
+					}
 				}
 				
 				
 				
-				modelAndView.addObject("expediente", e);
+				modelAndView.addObject("codigo", codigo);
 				modelAndView.addObject("msgsuccess", "Los datos del movimiento fueron guardados!");
 			}else {
 				modelAndView.addObject("msgalert", errorStr);

@@ -139,6 +139,10 @@ public class Expediente implements Serializable {
 		this.expedienteMovimiento = expedienteMovimiento;
 	}
 	
+	public String getNombreCompleto() {
+		return this.getNombre()+"/"+this.getEjercicio().getNombre();
+	}
+	
 	/**
 	 * 
 	 */

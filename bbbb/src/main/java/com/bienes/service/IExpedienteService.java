@@ -1,5 +1,7 @@
 package com.bienes.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -8,6 +10,8 @@ import com.bienes.model.Expediente;
 public interface IExpedienteService {
 	
 	Expediente buscarPorId(Integer idExpediente);
+	
+	List<Expediente> buscarPorIds(List<Integer> idsExpediente);
 	
 	void guardar(Expediente expediente);
 	

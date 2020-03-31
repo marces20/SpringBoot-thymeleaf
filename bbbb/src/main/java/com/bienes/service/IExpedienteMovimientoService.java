@@ -11,6 +11,8 @@ public interface IExpedienteMovimientoService {
 	
 	List<ExpedienteMovimiento> getByExpedienteId(Integer idExpediente);
 	
+	List<ExpedienteMovimiento> getByCodigo(Integer codigo);
+	
 	void guardar(ExpedienteMovimiento expedienteMovimiento);
 	
 	void eliminar(Integer idExpedienteMovimiento);
@@ -23,5 +25,9 @@ public interface IExpedienteMovimientoService {
 	
 	boolean isLastMovimientoServicioUsuario(Expediente expediente,Integer idOrga);
 	
+	boolean isLastMovimientoUsuario(Expediente expediente,Integer idUsuario);
+	
 	String tiempoEnMovimiento(ExpedienteMovimiento f);
+	
+	Integer getSecuenceCodigo();
 }

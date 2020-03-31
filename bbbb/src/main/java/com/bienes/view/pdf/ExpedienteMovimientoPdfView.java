@@ -1,6 +1,7 @@
 package com.bienes.view.pdf;
 
 import java.awt.Color;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class ExpedienteMovimientoPdfView extends AbstractPdfView {
 	protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer,
 									HttpServletRequest request, HttpServletResponse response) throws Exception {
 																  
-		ExpedienteMovimiento m = (ExpedienteMovimiento)model.get("expedienteMovimiento");
+		List<ExpedienteMovimiento> list = (List<ExpedienteMovimiento>) model.get("listMovimientos");
 		
 		PdfPTable tabla = new PdfPTable(1);
 		tabla.setSpacingAfter(20);
@@ -35,17 +36,20 @@ public class ExpedienteMovimientoPdfView extends AbstractPdfView {
 		cell.setBackgroundColor(new Color(195, 230, 203));
 		cell.setPadding(8f);
 		
-		if(m == null) {
+		if(list.size() > 0) {
+			for(ExpedienteMovimiento m: list) {
+				tabla.addCell(cell);
+				tabla.addCell("ID: " +  m.getId());
+			}
+			
+			
+		}else {
+		
 			cell.setBackgroundColor(Color.red);
 			tabla.addCell(cell);
 			tabla.addCell("ESTE EXPEDIENTE NO TIENE MOVIMIENTOS ASIGNADOS.!!!");
-		}else {
-			tabla.addCell(cell);
-			tabla.addCell("ID: " +  m.getId());
-			
-			
-		}
-		 
+		} 
+		
 		document.add(tabla);
 	}
 	

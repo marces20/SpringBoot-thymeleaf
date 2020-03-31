@@ -19,5 +19,9 @@ public interface ExpedienteMovimientoRepository extends PagingAndSortingReposito
 	@Query("select p from ExpedienteMovimiento p where p.id <> ?1 AND p.expediente = ?2 AND p.cancelado <> true order by id desc")
 	public List<ExpedienteMovimiento> getMovimientoAnterior(Integer idMovimiento,Expediente expediente);
 	
-	 
+	@Query(value="SELECT nextval('expediente_movimiento_codigo_id_seq')",nativeQuery = true) 
+    public Integer getSecuenceCodigo(); 
+	
+	@Query("select p from ExpedienteMovimiento p where p.codigo = ?1 ")
+	public List<ExpedienteMovimiento> getByCodigo(Integer codigo);
 }
