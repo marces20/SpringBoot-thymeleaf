@@ -40,7 +40,17 @@ public class ExpedienteServiceJpa implements IExpedienteService {
 		}
 		return null;
 	}
-
+	
+	@Override
+	public List<Expediente> buscarPorIds(List<Integer> idsExpediente) {
+		List<Expediente> r = expedienteRepo.buscarPorIds(idsExpediente);
+		if(r.size() > 0) {
+			return r;
+		}else {
+			return null;
+		}
+	}
+	
 	@Override
 	public void guardar(Expediente expediente) {
 		expedienteRepo.save(expediente);

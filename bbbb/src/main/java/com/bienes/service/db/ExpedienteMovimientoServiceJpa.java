@@ -33,7 +33,7 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 		}
 		return null;
 	}
-
+	
 	@Override
 	public void guardar(ExpedienteMovimiento expedienteMovimiento) {
 		expeMoviRepo.save(expedienteMovimiento);
@@ -49,6 +49,11 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 	@Override
 	public List<ExpedienteMovimiento> getByExpedienteId(Integer idExpediente) {
 		return expeMoviRepo.getByExpedienteId(idExpediente);
+	}
+	
+	@Override
+	public List<ExpedienteMovimiento> getByCodigo(Integer codigo) {
+		return expeMoviRepo.getByCodigo(codigo);
 	}
 
 	@Override
@@ -102,6 +107,17 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 	}
 	
 	@Override
+	public boolean isLastMovimientoUsuario(Expediente expediente,Integer idUsuario) {
+		 
+		ExpedienteMovimiento e = getLastMovimiento(expediente);
+		 
+		if(e != null && e.getUsuario().getId().equals(idUsuario)) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
 	public String tiempoEnMovimiento(ExpedienteMovimiento f){
 		String r = "";
 		
@@ -113,7 +129,10 @@ public class ExpedienteMovimientoServiceJpa implements IExpedienteMovimientoServ
 		
 		return r;
 	}
-	
-	
-	
+
+	@Override
+	public Integer getSecuenceCodigo() {
+		return expeMoviRepo.getSecuenceCodigo();
+	}
+
 }
