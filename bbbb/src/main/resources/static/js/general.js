@@ -7,10 +7,14 @@ $(function(){
 		window.location.href = $(this).closest('tr').attr('href');
 	}); 
 	
+	$('.searchModal').modalSearch();
+	
 	$('#checkAll').change( function(){
 		var table = $(this).closest('table');
 		table.find("input[name='check_listado[]']").prop("checked", $(this).prop( "checked" ) );
 	});
+	
+	
 		/*$('#exampleModal').on('show.bs.modal', function (event) {
 		  var button = $(event.relatedTarget) // Button that triggered the modal
 		  var url = button.data('url');
@@ -78,7 +82,7 @@ $(function(){
 			return false;
 		});
 		
-		$('#reportePaseExpediente').click( function() { //abrir modal para mostrar mensaje informe rentas
+		$('#reportePaseExpediente').click( function() { 
 			 
 			var url = $(this).attr("data-url");
 			var dialogo = $('<div></div>');
