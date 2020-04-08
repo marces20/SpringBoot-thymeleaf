@@ -16,13 +16,19 @@ public class PageRender<T> {
 	private int paginaActual;
 
 	private List<PageItem> paginas;
-
-	public PageRender(String url, Page<T> page) {
+	
+	private int pageSize;
+	
+	private int pages;
+	
+	public PageRender(String url, Page<T> page,int pageSize,int pages) {
 		this.url = url.replaceAll("&page=[0-9]", "");
 		this.page = page;
+		this.pages = pages;
+		this.pageSize = pageSize;
 		this.paginas = new ArrayList<PageItem>();
-
-		numElementosPorPagina = 6;
+		
+		//numElementosPorPagina = 6;
 		totalPaginas = page.getTotalPages();
 		paginaActual = page.getNumber() + 1;
 
@@ -80,4 +86,39 @@ public class PageRender<T> {
 	public boolean isHasPrevious() {
 		return page.hasPrevious();
 	}
+	
+	public int getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public int getPages() {
+		return pages;
+	}
+
+	public void setPages(int pages) {
+		this.pages = pages;
+	}
+
+	public String getDisplayXtoYofZ() {
+		int x = (getPageSize() * getPages());
+		int t =  (int) page.getTotalElements();
+		int f = x+getPageSize();
+		int r = (t > f)?f:t;
+				 
+		System.out.println(" 1111111111 "+x); 
+		System.out.println(" 1111111111 "+t); 
+		System.out.println(" 1111111111 "+f); 
+		System.out.println(" 1111111111 "+r); 
+		/* 1111111111 0
+		 1111111111 102
+		 1111111111 0
+		 1111111111 0*/
+		return "Mostrando "+(x + 1) + " a "+r+" de "+page.getTotalElements(); // + getTotalRowCount();
+	}
+	
+	 
 }
