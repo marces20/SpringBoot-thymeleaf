@@ -49,20 +49,21 @@ public class ExpedientesController {
 	@GetMapping("/index")
 	public String mostrarIndex(
 								  HttpServletRequest request,
-								   
 								  Model model,
 								  @RequestParam(defaultValue = "0") Integer page, 
-								  @RequestParam(defaultValue = "5") Integer pageSize,
+								  @RequestParam(defaultValue = "25") Integer pageSize,
 								  @RequestParam(required = false) String nombre
 							  ){
 			
-		Pageable pageRequest = PageRequest.of(page, 4);
+		Pageable pageRequest = PageRequest.of(page, pageSize);
 		Page<Expediente> expedientes = serviceExpedientes.findExpedienteTodo(nombre, pageRequest);
-		PageRender<Expediente> pageRender = new PageRender<Expediente>(request.getRequestURI()+"?"+request.getQueryString(), expedientes);
+		PageRender<Expediente> pageRender = new PageRender<Expediente>(request.getRequestURI()+"?"+request.getQueryString(), expedientes,pageSize,page);
 		
+		model.addAttribute("nombre", nombre);
 		model.addAttribute("titulo", "Listado de expedientes");
 		model.addAttribute("expedientes", expedientes);
 		model.addAttribute("page", pageRender);
+		model.addAttribute("pageSize", pageSize);
 		model.addAttribute("disabled", true);
 		return "expediente/index";
 	}

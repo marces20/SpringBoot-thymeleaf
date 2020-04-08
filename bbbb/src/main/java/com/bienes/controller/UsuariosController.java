@@ -47,9 +47,9 @@ public class UsuariosController {
 								  @RequestParam(required = false) Integer estatus
 							  ){
 			
-		Pageable pageRequest = PageRequest.of(page, 4);
+		Pageable pageRequest = PageRequest.of(page, pageSize);
 		Page<Usuario> usuarios = serviceUsuarios.findUsuarioTodo(username,nombre,estatus, pageRequest);
-		PageRender<Usuario> pageRender = new PageRender<Usuario>(request.getRequestURI()+"?"+request.getQueryString(), usuarios);
+		PageRender<Usuario> pageRender = new PageRender<Usuario>(request.getRequestURI()+"?"+request.getQueryString(), usuarios,pageSize,page);
 		
 		model.addAttribute("titulo", "Listado de clientes");
 		model.addAttribute("usuarios", usuarios);

@@ -38,18 +38,23 @@ public class OrganigramasController {
 	}
 	
 	@GetMapping("/modalBuscar")
-	public String modalBuscar(HttpServletRequest request,@ModelAttribute Organigrama organigrama,Model model,@RequestParam(required = false) String nombre) {
+	public String modalBuscar(HttpServletRequest request,
+								@ModelAttribute Organigrama organigrama,
+								Model model,
+								@RequestParam(defaultValue = "0") Integer page, 
+								@RequestParam(defaultValue = "25") Integer pageSize,
+								@RequestParam(required = false) String nombre) {
 		
-		Pageable pageRequest = PageRequest.of(0, 4);
+		Pageable pageRequest = PageRequest.of(page, pageSize);
 		Page<Organigrama> organigramas = serviceOrganigrama.findOrganigramaTodo(nombre, pageRequest);
-		PageRender<Organigrama> pageRender = new PageRender<Organigrama>(request.getRequestURI()+"?"+request.getQueryString(), organigramas);
-		
-		System.out.println("xxxxxxxxxxxxxxxxxx");
-		System.out.println("organigramas "+organigramas.getTotalElements());
+		PageRender<Organigrama> pageRender = new PageRender<Organigrama>(request.getRequestURI()+"?"+request.getQueryString(), organigramas,pageSize,page);
 		
 		
-		model.addAttribute("organigramas", organigramas);
+		
 		model.addAttribute("page", pageRender);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("organigramas", organigramas);
+		
 		return "organigrama/modalBusquedaOrganigrama";
 	}
 	
