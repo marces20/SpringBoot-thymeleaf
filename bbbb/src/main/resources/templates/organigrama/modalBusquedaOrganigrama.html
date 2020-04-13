@@ -1,4 +1,24 @@
 <div id="modalBusquedaOrganigrama" class="contenedorPaginador ajaxPaginador">
+	<form th:action="@{/organigramas/modalBuscar}" method="GET">
+		<div class="row">
+			
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label class="control-label">Nombre</label>
+					<input type="text" class="form-control" th:value=${nombre} name="nombre" id="nombre" placeholder="Nombre">
+				</div>
+			</div>
+			
+			<div class="col-sm-3">
+				<div class="form-group">
+					<label class="control-label">&nbsp</label>
+					<button class="btn btn-primary form-control">Buscar</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
 	<div class="tab-content" id="custom-content-below-tabContent" aria-labelledby="permisos-tab">
 		<div class="tab-pane fade show active" id="movimiento" role="tabpanel" aria-labelledby="movimiento-tab">
         	<div class="row">
