@@ -50,7 +50,7 @@ public class OrganigramasController {
 		PageRender<Organigrama> pageRender = new PageRender<Organigrama>(request.getRequestURI()+"?"+request.getQueryString(), organigramas,pageSize,page);
 		
 		
-		
+		model.addAttribute("nombre", nombre);
 		model.addAttribute("page", pageRender);
 		model.addAttribute("pageSize", pageSize);
 		model.addAttribute("organigramas", organigramas);
