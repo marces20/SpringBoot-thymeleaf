@@ -98,10 +98,29 @@
 		                  	<div class="col-sm-4">
 		                      <div class="form-group">
 			                    <label for="InputNombre">Iniciador</label>
-			                    <input type="text" th:disabled="${disabled}"   class="form-control" th:field="*{iniciador.nombre}" name="iniciador.nombre" id="iniciador" placeholder="Iniciador" required="required">
-			                    <input type="hidden" th:disabled="${disabled}" th:field="*{iniciador.id}" class="form-control" id="iniciador_id" name="iniciador.id" required="required">
+			                    <div class="input-group">
+				                    <input type="text" th:disabled="${disabled}"   class="form-control" th:field="*{iniciador.nombre}" name="iniciador.nombre" id="iniciador" placeholder="Iniciador" required="required">
+				                    <input type="hidden" th:disabled="${disabled}" th:field="*{iniciador.id}" class="form-control" id="iniciador_id" name="iniciador.id" required="required">
+				                  	<span th:unless="${disabled}" class="input-group-addon">
+											<a href="#" class="searchModal"
+														id="searchIniciadorExpediente" 
+														data-title="Selección de iniciador" 
+														data-url="/iniciador-expedientes/modalBuscar" 
+														data-height="650" 
+														data-width="700" 
+														data-listen="modal.seleccion.iniciadorExpediente.simple" 
+														data-label="#iniciador" 
+														data-field="#iniciador_id">
+												<i class="fas fa-search"></i>
+											</a>
+										</span>
+								</div>	
 			                  </div>
 		                    </div>
+		                    
+		                    
+		                    
+		                    
 		                  </div>
 		                </div>
 		                <!-- /.card-body -->
