@@ -55,7 +55,11 @@ public class OrganigramaServiceJpa implements IOrganigramaService{
         List<Predicate> predicates = new ArrayList<>();
         
         if(nombre != null) {
-        	predicates.add(cb.like(organigrama.get("nombre"),"%"+nombre+"%"));
+        	predicates.add(
+        					cb.like(
+        							cb.lower(organigrama.get("nombre"))
+        							,"%"+nombre.toLowerCase()+"%")
+        					);
         }
         
         //query.select(usuario).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
