@@ -13,5 +13,5 @@ public interface IniciadorExpedienteRepository extends PagingAndSortingRepositor
 	@Query("select p from IniciadorExpediente p where p.nombre like %?1%")
 	public List<IniciadorExpediente> findByNombre(String nombre);
 	
-	public List<IniciadorExpediente> findByNombreLikeIgnoreCase(String nombre);
+	public List<IniciadorExpediente> findByNombreLikeIgnoreCaseOrderByNombreAsc(String nombre);
 }

@@ -34,7 +34,7 @@ public class OrganigramaServiceJpa implements IOrganigramaService{
 	
 	@Override
 	public List<Organigrama> findByNombre(String nombre) {
-		return organigramaRepo.findByNombreLikeIgnoreCase("%"+nombre+"%");
+		return organigramaRepo.findByNombreLikeIgnoreCaseOrderByNombreAsc("%"+nombre+"%");
 	}
 
 	@Override

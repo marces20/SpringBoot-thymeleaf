@@ -115,6 +115,7 @@ $(function(){
 		
 		
 		$( "#organigrama" ).autocomplete({
+			  minLength: 3,
 			  source: function( request, response ) {
 			   // Fetch data
 				   $.ajax({
@@ -123,29 +124,46 @@ $(function(){
 				    dataType: "json",
 				    data: {},
 				    success: function( data ) {
-				    	response($.map(data, function (item) {
-		                    return {
-		                        //Indicamos el Valor
-		                        value: item.nombre,
-		                        //el Label si lo desean
-		                       // label: item.Nombre,
-		                        //y el ID
-		                        id: item.id
-		                    }
-		                }))
+				    	 if(!data.length){
+			    		        var result = [
+			    		            {
+			    		            	value: 'No se encuentran resultados', 
+			    		                id: 0
+			    		            }
+			    		        ];
+			    		        response(result);
+			    		    }else{
+						    	 response($.map(data.slice(0,20), function (item) {
+						    		 return {
+					                        //Indicamos el Valor
+					                        value: item.nombre,
+					                        //el Label si lo desean
+					                       // label: item.Nombre,
+					                        //y el ID
+					                        id: item.id
+					                    }
+				                    }))
+				    		
+				    	 }
 				    }
 				   });
 			  },
 			  select: function (event, ui) {
 			   		// Set selection
-				   $('#organigrama').val(ui.item.value); // display the selected text
-				   $('#organigrama_id').val(ui.item.id); // save selected id to input
+				   if(ui.item.id != 0){
+					   $('#organigrama').val(ui.item.value); // display the selected text
+					   $('#organigrama_id').val(ui.item.id); // save selected id to input
+				   }else{
+					   $('#organigrama').val(''); // display the selected text
+					   $('#organigrama_id').val('');
+				   }
 				   return false;
 			  }
 
 		}); 
 		
 		$( "#iniciador" ).autocomplete({
+			  minLength: 3,
 			  source: function( request, response ) {
 			   // Fetch data
 				   $.ajax({
@@ -154,23 +172,34 @@ $(function(){
 				    dataType: "json",
 				    data: {},
 				    success: function( data ) {
-				    	response($.map(data, function (item) {
-		                    return {
-		                        //Indicamos el Valor
-		                        value: item.nombre,
-		                        //el Label si lo desean
-		                       // label: item.Nombre,
-		                        //y el ID
-		                        id: item.id
-		                    }
-		                }))
+				    	if(!data.length){
+		    		        var result = [
+		    		            {
+		    		            	value: 'No se encuentran resultados', 
+		    		                id: 0
+		    		            }
+		    		        ];
+		    		        response(result);
+		    		    }else{
+					    	 response($.map(data.slice(0,20), function (item) {
+					    		 return {
+				                        value: item.nombre,
+				                        id: item.id
+				                    }
+			                    }))
+			    		}
 				    }
 				   });
 			  },
 			  select: function (event, ui) {
 			   		// Set selection
-				   $('#iniciador').val(ui.item.value); // display the selected text
-				   $('#iniciador_id').val(ui.item.id); // save selected id to input
+				   if(ui.item.id != 0){
+					   $('#iniciador').val(ui.item.value); // display the selected text
+					   $('#iniciador_id').val(ui.item.id); // save selected id to input
+				   }else{
+					   $('#iniciador').val(''); // display the selected text
+					   $('#iniciador_id').val('');
+				   }
 				   return false;
 			  }
 
