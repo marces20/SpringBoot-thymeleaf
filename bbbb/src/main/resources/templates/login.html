@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{fragments/mainLogin}">
+ 
+<body>
+<div layout:fragment="content">
+	 
+<div class="login-box">
+  <div class="login-logo">
+    <a href="../../index2.html"><b>Sistema</b>BS</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="card">
+    <div class="card-body login-card-body">
+      <p class="login-box-msg"></p>
+	  <div th:replace="fragments/alertSucces :: alertSucces"></div>		
+      <form th:action="@{/login}" method="post">
+        <div class="input-group mb-3">
+          <input type="text" name="username" id="username" class="form-control" placeholder="UserName" autofocus required />
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-envelope"></span>
+            </div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="password" id="password" class="form-control" placeholder="Password" required />
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-8">
+            <div class="icheck-primary">
+               
+            </div>
+          </div>
+          <!-- /.col -->
+          <div class="col-4">
+            <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+          </div>
+          <!-- /.col -->
+        </div>
+         
+      </form>
+
+      
+
+       
+       
+    </div>
+    <!-- /.login-card-body -->
+  </div>
+</div>
+<!-- /.login-box -->
+	   
+	     
+	    
+
+	 
+
+		 
+	  	
+	  
+	  
+	  
+	   
+	  
+
+</div>
+</body>
+</html>
+
+
