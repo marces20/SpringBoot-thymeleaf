@@ -38,10 +38,17 @@
 	        <div class="image">
 	          <img th:src="@{/img/avatar04.png}" class="img-circle elevation-2" alt="User Image">
 	        </div>
-	        <div class="info">
-	          	<div sec:authorize="isAuthenticated()">
+	        <div sec:authorize="isAuthenticated()">
+	        	<div class="info">
+	          	
 	        		<a href="#" class="d-block" sec:authentication="name"></a>
+	        		
       			</div>	
+      			<div class="info">
+      				<form id="logoutForm" th:action="@{/logout}" method="post">
+	        			<a href="#" onclick="document.getElementById('logoutForm').submit();" class="d-block"><i class="fas fa-sign-out-alt"></i></a>
+					</form>
+				</div>	
 	        </div>
 	      </div>
 	
