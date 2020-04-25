@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "Ejercicios")
@@ -19,6 +20,8 @@ public class Ejercicio implements Serializable {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "ejercicios_seq_gen")
 	@SequenceGenerator(name = "ejercicios_seq_gen", sequenceName = "ejercicios_id_seq",allocationSize=1)
 	private Integer id;
+	
+	@NotEmpty
 	private String nombre;
 	
 	private Date fecha_inicio;
