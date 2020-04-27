@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{fragments/main}">
+ 
+<body>
+<div layout:fragment="content">
+
+	<div th:replace="pedidofondo/nav-pedidofondo :: nav-pedidofondo"></div>	 	
+		
+	 
+	<div class="content-wrapper">
+		<div class="content-header">
+   			<div class="container-fluid"><div class="row mb-2"><div class="col-sm-12"><h1 class="m-0 text-dark">PEDIDO FONDO</h1></div></div></div> 
+  		</div>
+	    <section class="content">
+	      <div class="container-fluid">
+			<!-- Main row -->
+	        <div class="row">
+	          <!-- Left col -->
+	          <div class="col-12">
+        			<!-- general form elements -->
+		            <div class="card card-primary">
+		              <div th:replace="fragments/alertSucces :: alertSucces"></div>	
+		              <form th:action="@{/pedidofondos/save}" th:object="${pedidofondo}" method="post">
+		              	<input type="hidden" th:field="*{id}">
+		                <div class="card-body">
+		                   <div class="row">
+		                    <div class="col-sm-6">
+		                      <div class="form-group">
+			                    <label for="InputNombre">Numero</label>
+			                    <input type="text" th:disabled="${disabled}" th:field="*{numero}" th:d class="form-control" id="numero" name="numero" placeholder="Numero" required="required">
+			                  </div>
+		                    </div>
+		                    <div class="col-sm-2">
+		                      <div class="form-group">
+			                    <label for="InputNombre">Ejercicio</label>
+			                    <select th:disabled="${disabled}" class="form-control" th:field="*{ejercicio}" id="ejercicio">
+			                    	<option th:each="ejer : ${ejercicios}" th:value="${ejer.id}" th:text="${ejer.nombre}"></option>
+			                    </select>
+			                    
+			                  </div>
+		                    </div> 
+		                  </div>
+		                </div>
+		                <!-- /.card-body -->
+		
+		                <div class="card-footer">
+		                	<div th:if="${disabled}">
+		                  		<a class="btn btn-primary" th:href="@{/pedidofondos/edit/{id} (id=${id})}">Editar</a>
+		                  	</div>
+		                	<div th:if="${!disabled}">
+		                  		<button type="submit" class="btn btn-primary">Guardar</button>
+		                  	</div>
+		                </div>
+		              </form>
+		            </div>
+		            
+		          
+					             
+	          </div>
+	        </div> 
+		  </div>
+		</section>
+    </div>
+	
+</div>
+</body>
+</html>

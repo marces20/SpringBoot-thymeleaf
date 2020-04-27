@@ -102,9 +102,10 @@ public class ExpedientesController {
 		
 		
 		if (result.hasErrors()){
+			model.addAttribute("msgalert", "Error no se ha podido guardar el expediente. "+result.getFieldError().toString());
 			model.addAttribute("disabled", false);
 			return "expediente/form";
-		}	
+		}
 		
 		try {
 			boolean nuevo = false;
@@ -133,7 +134,8 @@ public class ExpedientesController {
 			attributes.addFlashAttribute("msgsuccess", "Los datos del expediente fueron guardados!");
 			return "redirect:/expedientes/show/"+expediente.getId();
 		} catch (Exception e) {
-			attributes.addFlashAttribute("msgalert", "Error no se ha podido guardar el expediente."+e);
+			model.addAttribute("disabled", false);
+			model.addAttribute("msgalert", "Error no se ha podido guardar el expediente."+e);
 			return "expediente/form";
 		}	
 	}
@@ -141,9 +143,14 @@ public class ExpedientesController {
 	@GetMapping("/delete/{id}")
 	public String eliminar(@PathVariable("id") int idUsuario, RedirectAttributes attributes) {
 		    	
-		// Eliminamos el expediente
-		serviceExpedientes.eliminar(idUsuario);
-		attributes.addFlashAttribute("msg", "El expediente fue eliminado!.");
+		try {
+			serviceExpedientes.eliminar(idUsuario);
+			attributes.addFlashAttribute("msg", "El expediente fue eliminado!.");
+
+		} catch (Exception e) {
+			attributes.addFlashAttribute("msgalert", "Error no se ha podido eliminar el expediente."+e);
+			return "redirect:/expedientes/index";
+		}	
 		return "redirect:/expedientes/index";
 	}
 	
