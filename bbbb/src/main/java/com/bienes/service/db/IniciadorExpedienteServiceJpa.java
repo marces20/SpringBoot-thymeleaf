@@ -18,8 +18,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.bienes.model.IniciadorExpediente;
-import com.bienes.model.Organigrama;
+import com.bienes.model.IniciadorExpediente; 
 import com.bienes.repository.IniciadorExpedienteRepository;
 import com.bienes.service.IIniciadorExpedienteService; 
 

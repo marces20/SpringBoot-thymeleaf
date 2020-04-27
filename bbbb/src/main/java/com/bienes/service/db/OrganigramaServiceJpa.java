@@ -18,7 +18,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.bienes.model.Expediente;
 import com.bienes.model.Organigrama;
 import com.bienes.repository.OrganigramaRepository;
 import com.bienes.service.IOrganigramaService;
