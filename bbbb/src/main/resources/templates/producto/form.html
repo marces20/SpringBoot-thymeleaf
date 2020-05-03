@@ -1,0 +1,66 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{fragments/main}">
+ 
+<body>
+<div layout:fragment="content">
+
+	<div th:replace="producto/nav-producto :: nav-producto"></div>	 	
+		
+	 
+	<div class="content-wrapper">
+		<div class="content-header">
+   			<div class="container-fluid"><div class="row mb-2"><div class="col-sm-12"><h1 class="m-0 text-dark">PRODUCTO</h1></div></div></div> 
+  		</div>
+	    <section class="content">
+	      <div class="container-fluid">
+			<!-- Main row -->
+	        <div class="row">
+	          <!-- Left col -->
+	          <div class="col-12">
+        			<!-- general form elements -->
+		            <div class="card card-primary">
+		              <div th:replace="fragments/alertSucces :: alertSucces"></div>	
+		              <form th:action="@{/productos/save}" th:object="${producto}" method="post">
+		              	<input type="hidden" th:field="*{id}">
+		                <div class="card-body">
+		                  
+		                  
+		                   <div class="row">
+		                    <div class="col-sm-6">
+		                      <div class="form-group">
+			                    <label for="InputNombre">Nombre</label>
+			                    <input type="text" th:disabled="${disabled}" th:field="*{nombre}" th:d class="form-control" id="nombre" name="nombre" placeholder="Nombre" required="required">
+			                  </div>
+		                    </div>
+		                     
+		                  </div>
+		                  
+		                   
+		                  
+		                   
+		                  
+		                </div>
+		                <!-- /.card-body -->
+		
+		                <div class="card-footer">
+		                	<div th:if="${disabled}">
+		                  		<a class="btn btn-primary" th:href="@{/productos/edit/{id} (id=${id})}">Editar</a>
+		                  	</div>
+		                	<div th:if="${!disabled}">
+		                  		<button type="submit" class="btn btn-primary">Guardar</button>
+		                  	</div>
+		                </div>
+		              </form>
+		            </div>
+		            
+		          
+					             
+	          </div>
+	        </div> 
+		  </div>
+		</section>
+    </div>
+	
+</div>
+</body>
+</html>
