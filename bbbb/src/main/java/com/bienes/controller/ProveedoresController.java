@@ -115,10 +115,10 @@ public class ProveedoresController {
 	}
 	
 	@GetMapping("/delete/{id}")
-	public String eliminar(@PathVariable("id") int idProveedore, RedirectAttributes attributes) {
+	public String eliminar(@PathVariable("id") int idProveedor, RedirectAttributes attributes) {
 		    	
 		try {
-			serviceProveedor.eliminar(idProveedore);
+			serviceProveedor.eliminar(idProveedor);
 			attributes.addFlashAttribute("msg", "El proveedor fue eliminado!.");
 
 		} catch (Exception e) {
@@ -127,6 +127,4 @@ public class ProveedoresController {
 		}	
 		return "redirect:/proveedores/index";
 	}
-	
-
 }
