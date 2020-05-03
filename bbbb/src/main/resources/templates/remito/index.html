@@ -65,7 +65,7 @@
 		                    </tr>
 		                    </thead>
 		                    <tbody>
-			                    <tr th:each="remito : ${remitos}">
+			                    <tr th:each="remito : ${remitos}" class="pointer" th:href="@{/remitos/show/{id} (id=${remito.id})}">
 			                      <td></td>
 			                      <td th:text="${remito.id}"></td>
 			                      <td th:text="${remito.numero}"></td>

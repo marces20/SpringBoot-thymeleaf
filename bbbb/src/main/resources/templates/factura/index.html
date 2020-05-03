@@ -65,7 +65,7 @@
 		                    </tr>
 		                    </thead>
 		                    <tbody>
-			                    <tr th:each="factura : ${facturas}">
+			                    <tr th:each="factura : ${facturas}" class="pointer" th:href="@{/facturas/show/{id} (id=${factura.id})}">
 			                      <td></td>
 			                      <td th:text="${factura.id}"></td>
 			                      <td th:text="${factura.numero}"></td>

@@ -66,7 +66,7 @@
 		                    </tr>
 		                    </thead>
 		                    <tbody>
-			                    <tr th:each="pedidofondo : ${pedidofondos}">
+			                    <tr th:each="pedidofondo : ${pedidofondos}" class="pointer" th:href="@{/pedidofondos/show/{id} (id=${pedidofondo.id})}">
 			                      <td></td>
 			                      <td th:text="${pedidofondo.id}"></td>
 			                      <td th:text="${pedidofondo.numero}"></td>
