@@ -61,8 +61,6 @@
 										var url = $(this).closest('form').attr("action").replace("&pageSize=", "&pageSizexx=");
 										var query =  $(this).closest('form').serialize();
 										var contenedor = $(this).closest('.contenedorPaginador');
-										alert(url+"&"+query)
-										
 										cargarContenido(url+"&"+query, contenedor);
 									} else {
 										$(this).closest('form').submit();
