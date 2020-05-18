@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bienes.model.Expediente;
 import com.bienes.model.Proveedor;
 import com.bienes.service.IProveedorService;
 import com.bienes.service.IUsuariosService;

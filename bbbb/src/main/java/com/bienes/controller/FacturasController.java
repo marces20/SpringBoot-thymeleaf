@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bienes.model.Expediente;
-import com.bienes.model.Factura;
-import com.bienes.model.FacturaLinea;
-import com.bienes.service.IFacturaLineaService;
+ 
+import com.bienes.model.Factura; 
 import com.bienes.service.IFacturaService;
 import com.bienes.service.IUsuariosService;
 import com.bienes.util.PageRender;
@@ -37,9 +35,7 @@ public class FacturasController {
 	
 	@Autowired
 	private IUsuariosService serviceUsuario;
-	
-	@Autowired
-	private IFacturaLineaService serviceFacturaLinea;   
+ 
 	
 	@GetMapping("/index")
 	public String mostrarIndex(

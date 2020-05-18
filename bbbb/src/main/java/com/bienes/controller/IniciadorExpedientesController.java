@@ -21,8 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bienes.model.IniciadorExpediente;
-import com.bienes.model.Organigrama;
+import com.bienes.model.IniciadorExpediente; 
 import com.bienes.service.IIniciadorExpedienteService;
 import com.bienes.util.PageRender;
 

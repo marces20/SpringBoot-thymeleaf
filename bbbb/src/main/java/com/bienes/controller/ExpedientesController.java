@@ -28,8 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.core.Authentication;
 
 import com.bienes.model.Expediente;
-import com.bienes.model.ExpedienteMovimiento;
-import com.bienes.model.Organigrama;
+import com.bienes.model.ExpedienteMovimiento; 
 import com.bienes.service.IEjercicioService;
 import com.bienes.service.IExpedienteMovimientoService;
 import com.bienes.service.IExpedienteService;
