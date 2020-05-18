@@ -22,6 +22,8 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Expedientes")
 public class Expediente implements Serializable {
@@ -56,6 +58,7 @@ public class Expediente implements Serializable {
 	
 	@OneToMany(cascade=CascadeType.ALL,mappedBy = "expediente", fetch = FetchType.LAZY)
 	@OrderBy("id DESC")
+	@JsonIgnore
     private List<ExpedienteMovimiento> expedienteMovimiento;
 	
 	@ManyToOne

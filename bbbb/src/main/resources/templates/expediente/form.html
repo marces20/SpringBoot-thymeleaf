@@ -30,7 +30,7 @@
         			<!-- general form elements -->
 		            <div class="card card-primary">
 		              
-		              
+		              <div th:replace="fragments/alertSucces :: alertSucces"></div>	
 		              <form th:action="@{/expedientes/save}" th:object="${expediente}" method="post">
 		              	
 		              	 

@@ -1,0 +1,114 @@
+
+
+<div class="card card-primary" th:if="${msgsuccess == null}">
+   <div th:replace="fragments/alertSucces :: alertSucces"></div>	
+   <form th:action="@{/facturalineas/save}" th:object="${facturaLinea}" method="post">
+   	<input type="hidden" name="factura.id" id="facturaId" th:value="${idFactura}">
+   	<input type="hidden" th:field="*{id}" id="id" name="id" >
+     <div class="card-body">
+       <div class="row">
+	        <div class="col-sm-6">
+	          	<div class="form-group">
+                    <label for="InputNombre">Producto</label>
+                    <div class="input-group">
+	                    <input type="text" class="form-control" th:field="*{producto.nombre}" name="producto.nombre" id="producto" placeholder="Producto" required="required">
+	                    <input type="hidden" th:field="*{producto.id}" class="form-control" id="producto_id" name="producto.id" required="required">
+	                  	<span class="input-group-addon">
+							<a href="#" class="searchModal"
+										id="searchProductoModal" 
+										data-title="Selección de Producto" 
+										data-url="/productos/modalBuscar" 
+										data-height="650" 
+										data-width="700" 
+										data-listen="modal.seleccion.producto.simple" 
+										data-label="#producto" 
+										data-field="#producto_id">
+								<i class="fas fa-search"></i>
+							</a>
+						</span>
+					</div>
+                  </div>
+	        </div>
+	        
+	        <div class="col-sm-2">
+	          	<div class="form-group">
+	         		<label for="InputNombre">Cantidad</label>
+	         		<input type="text" th:field="*{cantidad}" th:d class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad" required="required">
+	       		</div>
+	        </div>
+	        <div class="col-sm-2">
+	          	<div class="form-group">
+	         		<label for="InputNombre">Precio</label>
+	         		<input type="text" th:field="*{precio}" th:d class="form-control" id="precio" name="precio" placeholder="Precio" required="required">
+	       		</div>
+	        </div>
+         
+      	</div>
+       
+     </div>
+     <!-- /.card-body -->
+
+     <div class="card-footer">
+     	
+     	<div>
+     		<button type="button" class="btn btn-secondary cancelar" data-dismiss="modal">Cancelar</button>
+       		<button type="submit" class="btn btn-primary">Guardar</button>
+       	</div>
+     </div>
+   </form>
+</div>
+<div class="card card-primary" th:if="${msgsuccess != null}">
+	<div th:replace="fragments/alertSucces :: alertSucces"></div>
+	<button type="button" class="btn btn-secondary cerrar"  data-dismiss="modal">Cerrar</button>
+</div>
+<script>
+$(function(){
+	$('#searchProductoModal').modalSearch();
+	$("#descuento, #cantidad").numeric_input();
+	$("#precio").numeric_input({allowNegative: true});
+	
+	$( "#producto" ).autocomplete({
+		  minLength: 3,
+		  source: function( request, response ) {
+		   // Fetch data
+			   $.ajax({
+			    url: "/productos/suggest-producto/"+request.term,
+			    type: 'get',
+			    dataType: "json",
+			    data: {},
+			    success: function( data ) {
+			    	 if(!data.length){
+		    		        var result = [
+		    		            {
+		    		            	value: 'No se encuentran resultados', 
+		    		                id: 0
+		    		            }
+		    		        ];
+		    		        response(result);
+		    		    }else{
+					    	 response($.map(data.slice(0,20), function (item) {
+					    		 return {
+				                       value: item.nombre,
+				                       id: item.id
+				                    }
+			                    }))
+			    		
+			    	 }
+			    }
+			   });
+		  },
+		  select: function (event, ui) {
+		   		// Set selection
+			   if(ui.item.id != 0){
+				   $('#producto').val(ui.item.value); // display the selected text
+				   $('#producto_id').val(ui.item.id); // save selected id to input
+			   }else{
+				   $('#producto').val(''); // display the selected text
+				   $('#producto_id').val('');
+			   }
+			   return false;
+		  }
+
+	});
+});
+</script>

@@ -19,27 +19,28 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bienes.model.Expediente;
-import com.bienes.repository.ExpedientesRepository;
-import com.bienes.service.IExpedienteService;
+import com.bienes.model.Factura;
+import com.bienes.model.FacturaLinea;
+import com.bienes.repository.FacturaLineaRepository;
+import com.bienes.service.IFacturaLineaService; 
 
 @Service
-public class ExpedienteServiceJpa implements IExpedienteService {
+public class FacturaLineaServiceJpa implements IFacturaLineaService {
 	
 	@Autowired
-	private ExpedientesRepository expedienteRepo;
+	private FacturaLineaRepository facturaLineaRepo;
 	
 	@PersistenceContext
     private EntityManager entityManager;
 	
 	@Override
-	public List<Expediente> findByNombre(String nombre) {
-		return expedienteRepo.findByNombreLikeIgnoreCaseOrderByNombreAsc("%"+nombre+"%");
+	public List<FacturaLinea> getByFacturaId(Factura f) {
+		return facturaLineaRepo.getByFacturaId(f);
 	}
 	
 	@Override
-	public Expediente buscarPorId(Integer idExpediente) {
-		Optional<Expediente> optional = expedienteRepo.findById(idExpediente);
+	public FacturaLinea buscarPorId(Integer idFacturaLinea) {
+		Optional<FacturaLinea> optional = facturaLineaRepo.findById(idFacturaLinea);
 		if (optional.isPresent()) {
 			return optional.get();
 		}
@@ -47,47 +48,18 @@ public class ExpedienteServiceJpa implements IExpedienteService {
 	}
 	
 	@Override
-	public List<Expediente> buscarPorIds(List<Integer> idsExpediente) {
-		List<Expediente> r = expedienteRepo.buscarPorIds(idsExpediente);
-		if(r.size() > 0) {
-			return r;
-		}else {
-			return null;
-		}
-	}
-	
-	@Override
-	public void guardar(Expediente expediente) {
-		expedienteRepo.save(expediente);
-		
-	}
-
-	@Override
-	public void eliminar(Integer idExpediente) {
-		expedienteRepo.deleteById(idExpediente);
-		
-	}
-
-	@Override
-	@Transactional(readOnly = true)
-	public Page<Expediente> findAll(Pageable pageable) {
-		return expedienteRepo.findAll(pageable);
-	}
-	
-	@Override
-	public Page<Expediente> findExpedienteTodo(String nombre, Pageable pageable) {
-		
+	public Page<FacturaLinea> getPageByFacturaId(Pageable pageable,Factura factura) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Expediente> query = cb.createQuery(Expediente.class);
-        Root<Expediente> expediente = query.from(Expediente.class);
+        CriteriaQuery<FacturaLinea> query = cb.createQuery(FacturaLinea.class);
+        Root<FacturaLinea> fl = query.from(FacturaLinea.class);
  
        // Path<String> usernamePath = usuario.get("username");
  
         List<Predicate> predicates = new ArrayList<>();
         
         
-        if(nombre != null) {
-        	predicates.add(cb.like(expediente.get("nombre"),"%"+nombre+"%"));
+        if(factura != null) {
+        	predicates.add(cb.equal(fl.get("factura"), factura));
         }
         
         //query.select(usuario).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
@@ -104,13 +76,34 @@ public class ExpedienteServiceJpa implements IExpedienteService {
 		
 		Integer totalRows = entityManager.createQuery(query).getResultList().size();
         		
-        TypedQuery<Expediente> typedQuery = entityManager.createQuery(query);
+        TypedQuery<FacturaLinea> typedQuery = entityManager.createQuery(query);
         typedQuery.setFirstResult(primeiroRegistro);
         typedQuery.setMaxResults(totalRegistrosPorPagina);
         
         Long total = totalRows.longValue();
          
-        return new PageImpl<Expediente>(typedQuery.getResultList(), pageable,total);
+        return new PageImpl<FacturaLinea>(typedQuery.getResultList(), pageable,total);
 	}
 
+	@Override
+	public void guardar(FacturaLinea facturaLinea) {
+		facturaLineaRepo.save(facturaLinea);		
+	}
+	
+	@Override
+	public void eliminar(Integer idFacturaLinea) {
+		facturaLineaRepo.deleteById(idFacturaLinea);		
+	}
+	
+
+	@Override
+	@Transactional(readOnly = true)
+	public Page<FacturaLinea> findAll(Pageable pageable) {
+		return facturaLineaRepo.findAll(pageable);
+	}
+
+	
+
+	 
+	
 }

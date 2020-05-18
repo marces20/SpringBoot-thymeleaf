@@ -20,4 +20,6 @@ public interface IProveedorService {
 	Page<Proveedor> findAll(Pageable pageable);
 	
 	Page<Proveedor> findProveedorTodo(String nombre,Pageable pageable);
+	
+	List<Proveedor> findByNombre(String nombre);
 }	

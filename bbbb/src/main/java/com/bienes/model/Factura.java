@@ -1,22 +1,32 @@
 package com.bienes.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "Facturas")
-public class Factura {
+public class Factura implements Serializable {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "facturas_seq_gen")
@@ -39,6 +49,20 @@ public class Factura {
 	@ManyToOne
     @JoinColumn(name="create_user_id")
 	private Usuario create_user;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="expediente_id") 
+	private Expediente expediente;
+	
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+    @JoinColumn(name="proveedor_id") 
+	private Proveedor proveedor;
+		
+	@OneToMany(cascade=CascadeType.ALL,mappedBy = "factura", fetch = FetchType.LAZY)
+	@OrderBy("id DESC")
+    private List<FacturaLinea> facturaLinea;
+	
+	 
 
 	public Integer getId() {
 		return id;
@@ -88,5 +112,32 @@ public class Factura {
 		this.create_user = create_user;
 	}
 	
+	public List<FacturaLinea> getFacturaLinea() {
+		return facturaLinea;
+	}
+
+	public void setFacturaLinea(List<FacturaLinea> facturaLinea) {
+		this.facturaLinea = facturaLinea;
+	}
+	
+	public Expediente getExpediente() {
+		return expediente;
+	}
+
+	public void setExpediente(Expediente expediente) {
+		this.expediente = expediente;
+	}
+
+	public Proveedor getProveedor() {
+		return proveedor;
+	}
+
+	public void setProveedor(Proveedor proveedor) {
+		this.proveedor = proveedor;
+	}
+
+
+
+
 	private static final long serialVersionUID = 1L;
 }

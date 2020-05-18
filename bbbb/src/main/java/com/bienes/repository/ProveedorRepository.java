@@ -11,4 +11,6 @@ public interface ProveedorRepository extends PagingAndSortingRepository<Proveedo
 	
 	@Query("select p from Proveedor p where p.id in(?1)")
 	public List<Proveedor> buscarPorIds(List<Integer> ids);
+	
+	public List<Proveedor> findByNombreLikeIgnoreCaseOrderByNombreAsc(String nombre);
 }

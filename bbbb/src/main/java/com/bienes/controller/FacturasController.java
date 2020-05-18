@@ -20,7 +20,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.bienes.model.Factura; 
+import com.bienes.model.Expediente;
+import com.bienes.model.Factura;
+import com.bienes.model.FacturaLinea;
+import com.bienes.service.IFacturaLineaService;
 import com.bienes.service.IFacturaService;
 import com.bienes.service.IUsuariosService;
 import com.bienes.util.PageRender;
@@ -34,6 +37,9 @@ public class FacturasController {
 	
 	@Autowired
 	private IUsuariosService serviceUsuario;
+	
+	@Autowired
+	private IFacturaLineaService serviceFacturaLinea;   
 	
 	@GetMapping("/index")
 	public String mostrarIndex(
@@ -73,26 +79,38 @@ public class FacturasController {
 	}
 	
 	@GetMapping("/show/{id}")
-	public String show(@PathVariable("id") int idFactura, Model model) {		
-		Factura factura = serviceFactura.buscarPorId(idFactura);	 ;
+	public String show(HttpServletRequest request,
+					   @PathVariable("id") int idFactura, 
+			           Model model,
+					   @RequestParam(defaultValue = "0") Integer page, 
+			           @RequestParam(defaultValue = "25") Integer pageSize) {
 		
+		Factura factura = serviceFactura.buscarPorId(idFactura);		
 		model.addAttribute("factura",factura);
 		model.addAttribute("disabled", true);
+		//model.addAttribute("facturaLineas", serviceFacturaLinea.getByFacturaId(factura));
+		
+		
+		//model.addAttribute("facturaLineas", factura.getFacturaLinea());
 		return "factura/form";
 	}
 	
 	@PostMapping("/save")
 	public String guardar(@Valid @ModelAttribute Factura factura, BindingResult result, Model model, RedirectAttributes attributes ) {	
 		
-		
+		model.addAttribute("disabled", false);
 		if (result.hasErrors()){
 			model.addAttribute("msgalert", "Error no se ha podido guardar la factura. "+result.getFieldError().toString());
-			model.addAttribute("disabled", false);
 			return "factura/form";
 		}	
 		
 		try {
 			boolean nuevo = false;
+			
+			if(factura.getExpediente().getId() == null) {
+				factura.setExpediente(null);
+			}
+			
 			if(factura.getId() == null) {
 				factura.setCreate_date(new Date());
 				factura.setCreate_user(serviceUsuario.getUserLogged());
@@ -103,12 +121,10 @@ public class FacturasController {
 			}
 			serviceFactura.guardar(factura);
 			
-			 
-			
 			attributes.addFlashAttribute("msgsuccess", "Los datos de la factura fueron guardados!");
 			return "redirect:/facturas/show/"+factura.getId();
 		} catch (Exception e) {
-			model.addAttribute("msgalert", "Error no se ha podido guardar la factura."+e);
+			model.addAttribute("msgalert", "Error no se ha podido guardar la factura. e"+ e.getMessage());
 			return "factura/form";
 		}	
 	}

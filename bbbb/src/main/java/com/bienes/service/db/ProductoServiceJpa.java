@@ -68,6 +68,11 @@ public class ProductoServiceJpa implements IProductoService {
 	public Page<Producto> findAll(Pageable pageable) {
 		return productoRepo.findAll(pageable);
 	}
+	
+	@Override
+	public List<Producto> findByNombre(String nombre) {
+		return productoRepo.findByNombreLikeIgnoreCaseOrderByNombreAsc("%"+nombre+"%");
+	}
 
 	@Override
 	public Page<Producto> findTodo(String nombre, Pageable pageable) {

@@ -1,6 +1,9 @@
 package com.bienes.controller;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -18,12 +21,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.security.core.Authentication;
 
 import com.bienes.model.Expediente;
 import com.bienes.model.ExpedienteMovimiento;
+import com.bienes.model.Organigrama;
 import com.bienes.service.IEjercicioService;
 import com.bienes.service.IExpedienteMovimientoService;
 import com.bienes.service.IExpedienteService;
@@ -168,5 +174,70 @@ public class ExpedientesController {
 	@GetMapping("/modalPasarOtroServicio")
 	public String modalPasarOtroServicio(@ModelAttribute ExpedienteMovimiento expedienteMovimiento, Model model) {
 		return "expediente/modal/pasarOtroServicio";
+	}
+	
+	@GetMapping(value = "/suggest-expediente/{nombre}", produces = { "application/json" })
+	public @ResponseBody List<Expediente> cargarExpediente(@PathVariable String nombre) {
+		return serviceExpedientes.findByNombre(nombre);
+	}
+	
+	@GetMapping("/modalBuscar")
+	public String modalBuscar(HttpServletRequest request,
+								@ModelAttribute Expediente expediente,
+								Model model,
+								@RequestParam(defaultValue = "0") Integer page, 
+								@RequestParam(defaultValue = "25") Integer pageSize,
+								@RequestParam(required = false) String nombre) {
+		
+		Pageable pageRequest = PageRequest.of(page, pageSize);
+		Page<Expediente> expedientes = serviceExpedientes.findExpedienteTodo(nombre, pageRequest);
+		PageRender<Expediente> pageRender = new PageRender<Expediente>(request.getRequestURI()+"?"+request.getQueryString(), expedientes,pageSize,page);
+		
+		
+		model.addAttribute("nombre", nombre);
+		model.addAttribute("page", pageRender);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("expedientes", expedientes);
+		
+		return "expediente/modalBusquedaExpediente";
+	}
+	
+	@RequestMapping(value = "/get", method = RequestMethod.GET , produces = "application/json")
+	public @ResponseBody Map<String, Object> get(HttpServletRequest result, Model model, RedirectAttributes attributes ) {
+		Map<String, Object> r = new HashMap<String, Object>();
+		
+		Expediente o = null;
+		boolean error = false;
+		String errorStr = "";
+		try {
+			if(result.getParameter("expediente_id") != null) {
+				o = serviceExpedientes.buscarPorId(new Integer(result.getParameter("expediente_id")));
+				if(o == null) {
+					error =true;
+					errorStr += "No se puede seleccionar el Expediente";
+				}else {
+					r.put("success", true);
+					r.put("id", o.getId());
+					r.put("nombre", o.getNombreCompleto()); 
+				}
+			}else {
+				error =true;
+				errorStr += "No se puede obtener expediente_id";
+			}
+			
+			if(!error) {
+				r.put("success", true);
+				return r;
+			}else {
+				r.put("success", false);
+				r.put("message", errorStr);
+			}
+			
+			return r;
+		}catch (Exception e) {
+			r.put("success", false);
+			r.put("message", "Error no se puede obtener el expediente. "+e.toString());
+			return r;
+		}
 	}
 }

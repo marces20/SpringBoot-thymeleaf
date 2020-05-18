@@ -11,4 +11,6 @@ public interface ProductoRepository extends PagingAndSortingRepository<Producto,
 	
 	@Query("select p from Producto p where p.id in(?1)")
 	public List<Producto> buscarPorIds(List<Integer> ids);
+	
+	public List<Producto> findByNombreLikeIgnoreCaseOrderByNombreAsc(String nombre);
 }

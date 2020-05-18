@@ -1,6 +1,9 @@
 package com.bienes.controller;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -17,9 +20,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.bienes.model.Expediente;
 import com.bienes.model.Proveedor;
 import com.bienes.service.IProveedorService;
 import com.bienes.service.IUsuariosService;
@@ -126,5 +132,70 @@ public class ProveedoresController {
 			return "redirect:/proveedores/index";
 		}	
 		return "redirect:/proveedores/index";
+	}
+	
+	@GetMapping(value = "/suggest-proveedor/{nombre}", produces = { "application/json" })
+	public @ResponseBody List<Proveedor> cargarProveedor(@PathVariable String nombre) {
+		return serviceProveedor.findByNombre(nombre);
+	}
+	
+	@GetMapping("/modalBuscar")
+	public String modalBuscar(HttpServletRequest request,
+								@ModelAttribute Proveedor proveedor,
+								Model model,
+								@RequestParam(defaultValue = "0") Integer page, 
+								@RequestParam(defaultValue = "25") Integer pageSize,
+								@RequestParam(required = false) String nombre) {
+		
+		Pageable pageRequest = PageRequest.of(page, pageSize);
+		Page<Proveedor> proveedores = serviceProveedor.findProveedorTodo(nombre, pageRequest);
+		PageRender<Proveedor> pageRender = new PageRender<Proveedor>(request.getRequestURI()+"?"+request.getQueryString(), proveedores,pageSize,page);
+		
+		
+		model.addAttribute("nombre", nombre);
+		model.addAttribute("page", pageRender);
+		model.addAttribute("pageSize", pageSize);
+		model.addAttribute("proveedores", proveedores);
+		
+		return "proveedor/modalBusquedaProveedor";
+	}
+	
+	@RequestMapping(value = "/get", method = RequestMethod.GET , produces = "application/json")
+	public @ResponseBody Map<String, Object> get(HttpServletRequest result, Model model, RedirectAttributes attributes ) {
+		Map<String, Object> r = new HashMap<String, Object>();
+		
+		Proveedor o = null;
+		boolean error = false;
+		String errorStr = "";
+		try {
+			if(result.getParameter("proveedor_id") != null) {
+				o = serviceProveedor.buscarPorId(new Integer(result.getParameter("proveedor_id")));
+				if(o == null) {
+					error =true;
+					errorStr += "No se puede seleccionar el Proveedor";
+				}else {
+					r.put("success", true);
+					r.put("id", o.getId());
+					r.put("nombre", o.getNombre()); 
+				}
+			}else {
+				error =true;
+				errorStr += "No se puede obtener proveedor_id";
+			}
+			
+			if(!error) {
+				r.put("success", true);
+				return r;
+			}else {
+				r.put("success", false);
+				r.put("message", errorStr);
+			}
+			
+			return r;
+		}catch (Exception e) {
+			r.put("success", false);
+			r.put("message", "Error no se puede obtener el proveedor. "+e.toString());
+			return r;
+		}
 	}
 }

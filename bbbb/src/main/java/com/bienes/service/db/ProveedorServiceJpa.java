@@ -68,6 +68,11 @@ public class ProveedorServiceJpa  implements IProveedorService {
 	public Page<Proveedor> findAll(Pageable pageable) {
 		return proveedorRepo.findAll(pageable);
 	}
+	
+	@Override
+	public List<Proveedor> findByNombre(String nombre) {
+		return proveedorRepo.findByNombreLikeIgnoreCaseOrderByNombreAsc("%"+nombre+"%");
+	}
 
 	@Override
 	public Page<Proveedor> findProveedorTodo(String nombre, Pageable pageable) {

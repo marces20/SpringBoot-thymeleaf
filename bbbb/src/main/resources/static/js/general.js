@@ -113,6 +113,52 @@ $(function(){
 		    });
 		});
 		
+		$( "#expediente" ).autocomplete({
+			  minLength: 1,
+			  source: function( request, response ) {
+			   // Fetch data
+				   $.ajax({
+				    url: "/expedientes/suggest-expediente/"+request.term,
+				    type: 'get',
+				    dataType: "json",
+				    data: {},
+				    success: function( data ) {
+				    	
+				    	    if(!data.length){
+			    		        var result = [
+			    		            {
+			    		            	value: 'No se encuentran resultados', 
+			    		                id: 0
+			    		            }
+			    		        ];
+			    		        response(result);
+			    		    }else{
+			    		    	
+						    	 response($.map(data.slice(0,20), function (item) {
+						    		 return {
+					                        value: item.nombre+'/'+item.ejercicio.nombre,
+					                        id: item.id
+					                    }
+				                    }))
+				    		
+				    	  }
+				    }
+				   });
+			  },
+			  select: function (event, ui) {
+			   		// Set selection
+				   if(ui.item.id != 0){
+					   $('#expediente').val(ui.item.value); // display the selected text
+					   $('#expediente_id').val(ui.item.id); // save selected id to input
+				   }else{
+					   $('#expediente').val(''); // display the selected text
+					   $('#expediente_id').val('');
+				   }
+				   return false;
+			  }
+
+		});
+		
 		
 		$( "#organigrama" ).autocomplete({
 			  minLength: 3,
@@ -156,6 +202,50 @@ $(function(){
 				   }else{
 					   $('#organigrama').val(''); // display the selected text
 					   $('#organigrama_id').val('');
+				   }
+				   return false;
+			  }
+
+		}); 
+		
+		$( "#proveedor" ).autocomplete({
+			  minLength: 2,
+			  source: function( request, response ) {
+			   // Fetch data
+				   $.ajax({
+				    url: "/proveedores/suggest-proveedor/"+request.term,
+				    type: 'get',
+				    dataType: "json",
+				    data: {},
+				    success: function( data ) {
+				    	 if(!data.length){
+			    		        var result = [
+			    		            {
+			    		            	value: 'No se encuentran resultados', 
+			    		                id: 0
+			    		            }
+			    		        ];
+			    		        response(result);
+			    		    }else{
+						    	 response($.map(data.slice(0,20), function (item) {
+						    		 return {
+					                        value: item.nombre,
+					                        id: item.id
+					                    }
+				                    }))
+				    		
+				    	 }
+				    }
+				   });
+			  },
+			  select: function (event, ui) {
+			   		// Set selection
+				   if(ui.item.id != 0){
+					   $('#proveedor').val(ui.item.value); // display the selected text
+					   $('#proveedor_id').val(ui.item.id); // save selected id to input
+				   }else{
+					   $('#proveedor').val(''); // display the selected text
+					   $('#proveedor_id').val('');
 				   }
 				   return false;
 			  }

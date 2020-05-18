@@ -5,13 +5,15 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.bienes.model.Expediente;
+import com.bienes.model.Expediente; 
 
 public interface IExpedienteService {
 	
 	Expediente buscarPorId(Integer idExpediente);
 	
 	List<Expediente> buscarPorIds(List<Integer> idsExpediente);
+	
+	List<Expediente> findByNombre(String nombre);
 	
 	void guardar(Expediente expediente);
 	

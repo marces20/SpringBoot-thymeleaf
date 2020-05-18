@@ -20,4 +20,6 @@ public interface IProductoService {
 	Page<Producto> findAll(Pageable pageable);
 	
 	Page<Producto> findTodo(String nombre,Pageable pageable);
+	
+	List<Producto> findByNombre(String nombre);
 }

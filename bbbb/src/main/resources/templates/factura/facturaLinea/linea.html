@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="trLineasFacturas">
+	<tr th:each="fl : ${facturaLineas}" class="pointer">
+		<td></td>
+		<td th:text="${fl.producto.nombre}"></td>
+		<td th:text="${fl.cantidad}"></td>
+		<td th:text="${fl.precio}"></td>
+		<td th:text="${fl.getTotal()}"></td>
+		<td>
+			<a th:href="@{/facturalineas/delete/{id} (id=${fl.id}) }" 
+			    class="btn btn-danger btn-sm notSeleccion eliminarProducto" role="button" title="Eliminar">
+           		<i class="fas fa-trash" aria-hidden="true"></i>
+           		</a>
+			<a th:href="@{/facturalineas/editar/{id} (id=${fl.id}) }" 
+           		class="btn btn-success btn-sm notSeleccion modificarProducto" 
+           		role="button" title="Editar el registro.">
+           		<i class="fas fa-pencil-alt" aria-hidden="true"></i></a>	                      		
+		</td>
+	</tr>
+</div>
+</body>
+</html>
