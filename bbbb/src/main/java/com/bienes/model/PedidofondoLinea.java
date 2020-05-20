@@ -2,7 +2,6 @@ package com.bienes.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -19,12 +18,17 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "Factura_Lineas")
-public class FacturaLinea  implements Serializable{
+public class PedidofondoLinea implements Serializable{
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "factura_lineas_seq_gen")
-	@SequenceGenerator(name = "factura_lineas_seq_gen", sequenceName = "factura_lineas_id_seq",allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "pedido_fondo_lineas_seq_gen")
+	@SequenceGenerator(name = "pedido_fondo_lineas_seq_gen", sequenceName = "pedido_fondo_lineas_id_seq",allocationSize=1)
 	private Integer id;
+	
+	@NotNull
+	@ManyToOne
+    @JoinColumn(name="pedidofondo_id", nullable=false)
+	private Pedidofondo pedidofondo;	
 	
 	@NotNull
 	@ManyToOne
@@ -32,16 +36,8 @@ public class FacturaLinea  implements Serializable{
 	private Factura factura;	
 	
 	@NotNull
-	@ManyToOne
-    @JoinColumn(name="producto_id", nullable=false)
-	private Producto producto;	
+	public BigDecimal monto;
 	
-	@NotNull
-	public BigDecimal precio;
-	
-	@NotNull
-	public BigDecimal cantidad;
-		
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date create_date;
 	
@@ -56,16 +52,20 @@ public class FacturaLinea  implements Serializable{
     @JoinColumn(name="create_user_id")
 	private Usuario create_user;
 	
-	public BigDecimal getTotal() {
-		return getPrecio().multiply(getCantidad()).setScale(2, RoundingMode.HALF_UP);
-	}
-	
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Pedidofondo getPedidofondo() {
+		return pedidofondo;
+	}
+
+	public void setPedidofondo(Pedidofondo pedidofondo) {
+		this.pedidofondo = pedidofondo;
 	}
 
 	public Factura getFactura() {
@@ -76,28 +76,12 @@ public class FacturaLinea  implements Serializable{
 		this.factura = factura;
 	}
 
-	public Producto getProducto() {
-		return producto;
+	public BigDecimal getMonto() {
+		return monto;
 	}
 
-	public void setProducto(Producto producto) {
-		this.producto = producto;
-	}
-
-	public BigDecimal getPrecio() {
-		return precio;
-	}
-
-	public void setPrecio(BigDecimal precio) {
-		this.precio = precio;
-	}
-
-	public BigDecimal getCantidad() {
-		return cantidad;
-	}
-
-	public void setCantidad(BigDecimal cantidad) {
-		this.cantidad = cantidad;
+	public void setMonto(BigDecimal monto) {
+		this.monto = monto;
 	}
 
 	public Date getCreate_date() {
@@ -107,7 +91,7 @@ public class FacturaLinea  implements Serializable{
 	public void setCreate_date(Date create_date) {
 		this.create_date = create_date;
 	}
-
+	
 	public Date getWrite_date() {
 		return write_date;
 	}
@@ -131,6 +115,7 @@ public class FacturaLinea  implements Serializable{
 	public void setCreate_user(Usuario create_user) {
 		this.create_user = create_user;
 	}
-	
+
 	private static final long serialVersionUID = 1L;
+
 }

@@ -1,6 +1,7 @@
 package com.bienes.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Null;
 
+import org.hibernate.annotations.Formula;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -50,7 +52,7 @@ public class Factura implements Serializable {
     @JoinColumn(name="create_user_id")
 	private Usuario create_user;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="expediente_id") 
 	private Expediente expediente;
 	
@@ -62,7 +64,16 @@ public class Factura implements Serializable {
 	@OrderBy("id DESC")
     private List<FacturaLinea> facturaLinea;
 	
-	 
+	@Formula("(select sum(fl.precio*fl.cantidad) from Factura_Lineas  fl where fl.factura_id= id)")
+	private BigDecimal total; 
+	
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
+	}
 
 	public Integer getId() {
 		return id;

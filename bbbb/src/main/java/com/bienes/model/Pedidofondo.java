@@ -1,5 +1,6 @@
 package com.bienes.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -17,7 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "pedido_fondos")
-public class Pedidofondo {
+public class Pedidofondo implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "pedido_fondos_seq_gen")
