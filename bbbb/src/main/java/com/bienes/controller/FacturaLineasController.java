@@ -30,6 +30,7 @@ import com.bienes.model.FacturaLinea;
 import com.bienes.service.IFacturaLineaService;
 import com.bienes.service.IFacturaService;
 import com.bienes.service.IUsuariosService;
+import com.bienes.util.NumberUtils;
 import com.bienes.util.PageRender;
 
 @Controller
@@ -67,7 +68,8 @@ public class FacturaLineasController {
 			model.addAttribute("page", pageRender);
 			model.addAttribute("pageSize", pageSize);
 			model.addAttribute("facturaLineas", facturaLineas);
-		}
+			model.addAttribute("utils", NumberUtils.class);
+		}	
 		return "factura/facturaLinea/index";
 	}
 	

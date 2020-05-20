@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bienes.model.Factura; 
 import com.bienes.service.IFacturaService;
 import com.bienes.service.IUsuariosService;
+import com.bienes.util.NumberUtils;
 import com.bienes.util.PageRender;
 
 @Controller
@@ -56,6 +57,7 @@ public class FacturasController {
 		model.addAttribute("page", pageRender);
 		model.addAttribute("pageSize", pageSize);
 		model.addAttribute("disabled", true);
+		model.addAttribute("utils", NumberUtils.class);
 		return "factura/index";
 	}
 	
