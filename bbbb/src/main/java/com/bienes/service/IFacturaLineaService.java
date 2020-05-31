@@ -12,7 +12,7 @@ public interface IFacturaLineaService {
 	
 	List<FacturaLinea> getByFacturaId(Factura f);
 	
-	Page<FacturaLinea> getPageByFacturaId(Pageable pageable,Factura factura);
+	Page<FacturaLinea> getPageByFactura(Pageable pageable,Factura factura);
 	
 	void guardar(FacturaLinea facturaLinea);
 	

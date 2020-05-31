@@ -347,8 +347,7 @@ public class ExpedientesMovimientosController {
 			 
 			
 			
-		    return modelAndView;		
-		    
+		    return modelAndView;	    
 				 
 			
 		} catch (RollbackException ex) {

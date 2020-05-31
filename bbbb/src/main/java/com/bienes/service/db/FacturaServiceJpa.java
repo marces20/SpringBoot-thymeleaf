@@ -1,5 +1,6 @@
 package com.bienes.service.db;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -82,6 +83,46 @@ public class FacturaServiceJpa implements IFacturaService {
         	predicates.add(cb.like(factura.get("numero"),"%"+numero+"%"));
         }
         
+        //query.select(usuario).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
+        
+        query.where((Predicate[]) predicates.toArray(new Predicate[0]));
+         
+        int paginaAtual = pageable.getPageNumber();
+        int totalRegistrosPorPagina = pageable.getPageSize();
+        int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
+         
+        System.out.println("--------totalRegistrosPorPagina-------- "+totalRegistrosPorPagina);
+		System.out.println("--------paginaAtual-------- "+paginaAtual);
+		System.out.println("------primeiroRegistro---------- "+primeiroRegistro);
+		
+		Integer totalRows = entityManager.createQuery(query).getResultList().size();
+        		
+        TypedQuery<Factura> typedQuery = entityManager.createQuery(query);
+        typedQuery.setFirstResult(primeiroRegistro);
+        typedQuery.setMaxResults(totalRegistrosPorPagina);
+        
+        Long total = totalRows.longValue();
+         
+        return new PageImpl<Factura>(typedQuery.getResultList(), pageable,total);
+	}
+	
+	@Override
+	public Page<Factura> findConDeuda(String numero, Pageable pageable) {
+		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Factura> query = cb.createQuery(Factura.class);
+        Root<Factura> factura = query.from(Factura.class);
+ 
+       // Path<String> usernamePath = usuario.get("username");
+ 
+        List<Predicate> predicates = new ArrayList<>();
+        
+        
+        if(numero != null) {
+        	//predicates.add(cb.like(factura.get("numero"),"%"+numero+"%"));
+        	
+        }
+        
+        predicates.add( cb.greaterThan( factura.get("totalDeudaPedido") , BigDecimal.ZERO));
         //query.select(usuario).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
         
         query.where((Predicate[]) predicates.toArray(new Predicate[0]));

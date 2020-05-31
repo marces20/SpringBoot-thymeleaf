@@ -62,7 +62,7 @@ public class FacturaLineasController {
 		Factura factura = serviceFactura.buscarPorId(idFactura);		
 		if(factura != null) {
 			Pageable pageRequest = PageRequest.of(page, pageSize);
-			Page<FacturaLinea> facturaLineas = serviceFacturaLinea.getPageByFacturaId(pageRequest, factura);
+			Page<FacturaLinea> facturaLineas = serviceFacturaLinea.getPageByFactura(pageRequest, factura);
 			PageRender<FacturaLinea> pageRender = new PageRender<FacturaLinea>(request.getRequestURI()+"?"+request.getQueryString(), facturaLineas,pageSize,page);
 			
 			model.addAttribute("page", pageRender);

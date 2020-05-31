@@ -35,7 +35,7 @@ public class FacturaLineaServiceJpa implements IFacturaLineaService {
 	
 	@Override
 	public List<FacturaLinea> getByFacturaId(Factura f) {
-		return facturaLineaRepo.getByFacturaId(f);
+		return facturaLineaRepo.getByFactura(f);
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class FacturaLineaServiceJpa implements IFacturaLineaService {
 	}
 	
 	@Override
-	public Page<FacturaLinea> getPageByFacturaId(Pageable pageable,Factura factura) {
+	public Page<FacturaLinea> getPageByFactura(Pageable pageable,Factura factura) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<FacturaLinea> query = cb.createQuery(FacturaLinea.class);
         Root<FacturaLinea> fl = query.from(FacturaLinea.class);

@@ -52,7 +52,7 @@ public class Factura implements Serializable {
     @JoinColumn(name="create_user_id")
 	private Usuario create_user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="expediente_id") 
 	private Expediente expediente;
 	
@@ -67,6 +67,43 @@ public class Factura implements Serializable {
 	@Formula("(select sum(fl.precio*fl.cantidad) from Factura_Lineas  fl where fl.factura_id= id)")
 	private BigDecimal total; 
 	
+	@Formula("(select sum(fl.monto) from Pedido_Fondo_Lineas  fl where fl.factura_id= id)")
+	private BigDecimal totalPedidoFondo; 
+	
+	@Formula("(select sum(fl.precio*fl.cantidad)-(select COALESCE(sum(pl.monto),0) from Pedido_Fondo_Lineas pl where pl.factura_id= id) from Factura_Lineas  fl where fl.factura_id= id)")
+	private BigDecimal totalDeudaPedido; 
+	
+	
+	/*public BigDecimal getTotalDeudaPedido() {
+		BigDecimal tpd = BigDecimal.ZERO;
+		BigDecimal t = BigDecimal.ZERO;
+		
+		if(getTotalPedidoFondo() != null) {
+			tpd = getTotalPedidoFondo();
+		}
+		
+		if(getTotal() != null) {
+			t = getTotal();
+		}
+		return t.subtract(tpd);
+	}*/
+	
+	public BigDecimal getTotalDeudaPedido() {
+		return totalDeudaPedido;
+	}
+
+	public void setTotalDeudaPedido(BigDecimal totalDeudaPedido) {
+		this.totalDeudaPedido = totalDeudaPedido;
+	}
+
+	public BigDecimal getTotalPedidoFondo() {
+		return totalPedidoFondo;
+	}
+
+	public void setTotalPedidoFondo(BigDecimal totalPedidoFondo) {
+		this.totalPedidoFondo = totalPedidoFondo;
+	}
+
 	public BigDecimal getTotal() {
 		return total;
 	}

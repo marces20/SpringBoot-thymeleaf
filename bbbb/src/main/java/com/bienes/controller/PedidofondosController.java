@@ -1,7 +1,10 @@
 package com.bienes.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.RollbackException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
@@ -17,13 +20,23 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
+import com.bienes.model.Factura;
 import com.bienes.model.Pedidofondo;
+import com.bienes.model.PedidofondoLinea;
 import com.bienes.service.IEjercicioService;
+import com.bienes.service.IFacturaService;
+import com.bienes.service.IPedidoFondoLineaService;
 import com.bienes.service.IPedidofondoService;
 import com.bienes.service.IUsuariosService;
+import com.bienes.util.ArrayUtils;
+import com.bienes.util.NumberUtils;
 import com.bienes.util.PageRender;
 
 @Controller
@@ -34,10 +47,16 @@ public class PedidofondosController {
 	private IPedidofondoService servicePedidofondo;
 	
 	@Autowired
+	private IPedidoFondoLineaService servicePedidofondoLinea;
+	
+	@Autowired
 	private IUsuariosService serviceUsuario;
 	
 	@Autowired
 	private IEjercicioService serviceEjercicio;
+	
+	@Autowired
+	private IFacturaService serviceFactura;
 	
 	@GetMapping("/index")
 	public String mostrarIndex(
@@ -131,5 +150,91 @@ public class PedidofondosController {
 	@ModelAttribute
 	public void listaEjercicios(Model model) {
 		model.addAttribute("ejercicios", serviceEjercicio.findAll());
+	}
+	
+	@GetMapping("/carga/{pedidofondo_id}")
+	public String carga(
+									
+								  HttpServletRequest request,
+								  
+								  Model model,
+								  @PathVariable("pedidofondo_id") Integer idPedidofondo,
+								  @RequestParam(defaultValue = "0") Integer page, 
+								  @RequestParam(defaultValue = "50") Integer pageSize,
+								  @RequestParam(required = false) String numero
+							  ){
+			
+		
+		Pedidofondo pedidofondo = servicePedidofondo.buscarPorId(idPedidofondo);		
+		 
+		if(pedidofondo != null) {
+			Pageable pageRequest = PageRequest.of(page, pageSize);
+			Page<Factura> facturas = serviceFactura.findConDeuda(numero, pageRequest);
+			PageRender<Factura> pageRender = new PageRender<Factura>(request.getRequestURI()+"?"+request.getQueryString(), facturas,pageSize,page);
+			
+			model.addAttribute("numero", numero);
+			model.addAttribute("titulo", "Listado de Facturas");
+			model.addAttribute("facturas", facturas);
+			model.addAttribute("idPedidofondo", idPedidofondo);
+			model.addAttribute("page", pageRender);
+			model.addAttribute("pageSize", pageSize);
+			model.addAttribute("disabled", true);
+			model.addAttribute("utils", NumberUtils.class);
+		}	
+		
+		return "pedidofondo/carga";
+	}
+	
+	@GetMapping("/modalCargarPedido")
+	public String modalCargarPedido(@ModelAttribute PedidofondoLinea pedidoFondoLinea,
+									@RequestParam(required = true) Integer pedidofondo_id,
+									@RequestParam(required = true) Integer factura_id, 
+									Model model) {
+		Factura f = serviceFactura.buscarPorId(factura_id);
+		Pedidofondo p = servicePedidofondo.buscarPorId(pedidofondo_id);
+		
+		pedidoFondoLinea.setFactura(f);
+		pedidoFondoLinea.setPedidofondo(p);
+		return "pedidofondo/modal/cargarPedido";
+	}
+	
+	@RequestMapping(value = "/saveLinea", method = RequestMethod.POST , produces = "application/json")
+	public @ResponseBody ModelAndView guardarLinea(HttpServletRequest result,@ModelAttribute PedidofondoLinea pedidoFondoLinea, Model model, RedirectAttributes attributes ) {	
+		
+		ModelAndView modelAndView = new ModelAndView("pedidofondo/modal/cargarPedido");
+		
+		try {
+			List<Integer> ids = new ArrayList<Integer>();
+			
+			/*if(result.getParameter("expediente_id") != null) {
+				ids.add(new Integer(result.getParameter("expediente_id")));
+			}else if(result.getParameter("check_listado[]") != null && result.getParameterValues("check_listado[]").length > 0) {
+				ids = ArrayUtils.getSeleccionados(result.getParameterValues("check_listado[]"));
+			}else {
+				modelAndView.addObject("msgalert", "No se puede determinar el Expediente.");
+				return modelAndView;
+			}*/
+			 
+			
+			if(pedidoFondoLinea.getId() == null) {
+				pedidoFondoLinea.setCreate_date(new Date());
+				pedidoFondoLinea.setCreate_user(serviceUsuario.getUserLogged());
+				 
+			}else {
+				pedidoFondoLinea.setWrite_date(new Date());
+				pedidoFondoLinea.setWrite_user(serviceUsuario.getUserLogged());
+			}
+			servicePedidofondoLinea.guardar(pedidoFondoLinea);
+			modelAndView.addObject("msgsuccess", "El pedido fue guardado!");
+			
+			
+			return modelAndView;
+			
+		} catch (RollbackException ex) {
+			System.out.print("-RollbackException-----"+ex.getMessage());
+			modelAndView.addObject("msgalert", "Error no se ha podido guardar el movimiento ");
+			return modelAndView;
+			
+		}	
 	}
 }

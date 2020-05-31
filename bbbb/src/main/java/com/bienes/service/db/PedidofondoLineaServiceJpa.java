@@ -16,16 +16,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bienes.model.Factura;
-import com.bienes.model.FacturaLinea;
+ 
 import com.bienes.model.Pedidofondo;
-import com.bienes.model.PedidofondoLinea;
-import com.bienes.repository.FacturaLineaRepository;
+import com.bienes.model.PedidofondoLinea; 
 import com.bienes.repository.PedidofondoLineaRepository;
 import com.bienes.service.IPedidoFondoLineaService;
 
+@Service
 public class PedidofondoLineaServiceJpa implements IPedidoFondoLineaService{
 	
 	@Autowired
@@ -77,7 +77,7 @@ public class PedidofondoLineaServiceJpa implements IPedidoFondoLineaService{
         
         
         if(pedidoFondo != null) {
-        	//predicates.add(cb.equal(fl.get("factura"), pedidoFondo));
+        	predicates.add(cb.equal(fl.get("pedidofondo"), pedidoFondo));
         }
         
         //query.select(usuario).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
@@ -87,11 +87,7 @@ public class PedidofondoLineaServiceJpa implements IPedidoFondoLineaService{
         int paginaAtual = pageable.getPageNumber();
         int totalRegistrosPorPagina = pageable.getPageSize();
         int primeiroRegistro = paginaAtual * totalRegistrosPorPagina;
-         
-        System.out.println("--------totalRegistrosPorPagina-------- "+totalRegistrosPorPagina);
-		System.out.println("--------paginaAtual-------- "+paginaAtual);
-		System.out.println("------primeiroRegistro---------- "+primeiroRegistro);
-		
+     		
 		Integer totalRows = entityManager.createQuery(query).getResultList().size();
         		
         TypedQuery<PedidofondoLinea> typedQuery = entityManager.createQuery(query);

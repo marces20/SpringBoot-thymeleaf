@@ -11,5 +11,5 @@ import com.bienes.model.FacturaLinea;
 public interface FacturaLineaRepository extends PagingAndSortingRepository<FacturaLinea, Integer> {
 	
 	@Query("select p from FacturaLinea p where p.factura = ?1 ")
-	public List<FacturaLinea> getByFacturaId(Factura f); 
+	public List<FacturaLinea> getByFactura(Factura f); 
 }

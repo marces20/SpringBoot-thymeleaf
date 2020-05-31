@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "Factura_Lineas")
+@Table(name = "Pedido_Fondo_Lineas")
 public class PedidofondoLinea implements Serializable{
 	
 	@Id

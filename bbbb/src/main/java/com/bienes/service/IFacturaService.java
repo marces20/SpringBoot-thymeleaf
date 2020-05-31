@@ -20,4 +20,6 @@ public interface IFacturaService {
 	Page<Factura> findAll(Pageable pageable);
 	
 	Page<Factura> findTodo(String numero,Pageable pageable);
+	
+	Page<Factura> findConDeuda(String numero,Pageable pageable);
 }
