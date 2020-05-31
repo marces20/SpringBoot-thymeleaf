@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="trLineasPedidoFondos">
+	<tr th:each="fl : ${pedidofondoLineas}" class="pointer">
+		<td></td>
+		<td th:text="${fl.factura.numero}"></td>
+		<td th:text="${fl.factura.expediente.getNombreCompleto()}"></td>
+		<td th:text="${fl.factura.proveedor.getNombre()}"></td>
+		<td th:text="${utils.moneda(fl.monto)}"></td>
+		<td>
+			<a th:href="@{/fpedidofondolineas/delete/{id} (id=${fl.id}) }" 
+			    class="btn btn-danger btn-sm notSeleccion eliminarPedidofondoLinea" role="button" title="Eliminar">
+           		<i class="fas fa-trash" aria-hidden="true"></i>
+           		</a>
+			<!-- <a th:href="@{/pedidofondolineas/editar/{id} (id=${fl.id}) }" 
+           		class="btn btn-success btn-sm notSeleccion modificarPedidofondoLinea" 
+           		role="button" title="Editar el registro.">
+           		<i class="fas fa-pencil-alt" aria-hidden="true"></i></a>	     -->                  		
+		</td>
+	</tr>
+</div>
+</body>
+</html>

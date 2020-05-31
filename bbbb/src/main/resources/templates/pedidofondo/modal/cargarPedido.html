@@ -1,0 +1,64 @@
+<div class="modalCargarPedido">
+	<div th:replace="fragments/alertSucces :: alertSucces"></div>
+	
+	<div th:if="${msgsuccess == null}">
+		<form th:action="@{/pedidofondos/saveLinea}" th:object="${pedidofondoLinea}" method="post" id="formCargarPedidoFondo">
+			<input type="hidden" class="form-control" th:field="*{factura.id}" id="factura_id" name="factura.id" required="required">
+			<input type="hidden" class="form-control" th:field="*{pedidofondo.id}" id="pedidofondo_id" name="pedidofondo.id" required="required">
+			
+			<div class="row">
+				<div class="form-group">
+					<label for="InputNombre">Monto</label>
+					<input type="text" class="form-control inputNumericMask" name="monto" id="monto" placeholder="Monto" required="required">
+				</div>
+			</div>
+			
+			<div class="row">
+	     		<div class="col-sm-6">
+	     			<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+    				<button type="submit" class="btn btn-primary">Guardar</button>
+    			</div>	
+	     	</div>	
+			
+		</form>
+   	</div> 
+</div>   
+<script type="text/javascript">
+$(".inputNumericMask").numeric_input();
+$(document).on("submit", '#formCargarPedidoFondo', function(){
+	 
+    if($('#monto').val().length == 0){
+    	alert('Debe cargar un monto.')
+    	return false;
+    }
+	var form = $(this);
+	var url = form.attr('action');
+	var str = $("#formCargarPedidoFondo").serialize();
+	var submit = form.find("button[type='submit']");
+	
+
+	
+
+    
+	$.ajax({
+        type:"post",
+        data:str,
+        url:url,
+        
+        success: function(data){
+        	location.reload();
+        	$('.modalCargarPedido').replaceWith(data);
+        },
+        error : function(data) {
+        	 
+        	$('.modalCargarPedido').replaceWith(data);
+        	 
+           }
+    }); 
+	 
+	
+	return false;
+});
+
+
+</script>

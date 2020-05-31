@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="lineasFacturas">
+<div id="listaLineaPedidos" class="contenedorPaginador ajaxPaginador">
+
+<p>
+	
+	 
+	 
+	 
+</p>
+
+  
+
+<table id="listaDeProductos" class="table table-striped table-bordered">
+	<thead>
+		<tr data-url="">
+
+			<th width="30">
+				<input type="checkbox" name="checkAll" id="checkAll"/>
+			</th>
+			 
+			<th>N° Factura</th>
+			<th>Expediente</th>
+			<th>Proveedor</th>
+			<th>Total</th>
+			<th width="30"></th>
+		<tr>	
+	</thead>
+	<tbody>
+		<div th:replace="pedidofondo/pedidofondoLinea/linea :: trLineasPedidoFondos"></div> 
+	</tbody>
+</table>
+
+  <div th:replace="fragments/paginator-nav :: paginator"></div> 
+  <div class="pagination pull-right">
+  
+</div>
+</div>
+
+<script>
+$( function(){
+	/**
+	 * Ventana de carga linea de productos en ordenes
+	 */
+	 
+	 
+	var contenedor = $("#listaLineaPedidos");
+
+	/*contenedor.on('click', '#nuevoProducto', function(){
+		urlContenidoModal = '/facturalineas/crear/'+$('#facturaId').val();
+		mostrarModal(urlContenidoModal);
+		return false;
+	});
+	
+	contenedor.on('click', '.modificarProducto', function(){
+		lineaParaEditar = $(this).closest('tr');
+		var modal = mostrarModal($(this).attr('href'));
+		modal.dialog('option', 'title', 'Editar producto');	
+		return false;
+	});*/
+	
+	contenedor.on('click', '.eliminarPedidofondoLinea', function(){
+		var url = $(this).attr('href');
+		var mensaje = "¿Confirma que desea eliminar el registro?";
+		if(confirm(mensaje)){
+			$this = $(this);
+			$.get(url, function(data){
+				if(data.success){
+					$this.closest("tr").remove();
+				} else {
+					alert("No se puedo eliminar el registro.");
+				}
+			});
+		}
+		return false;
+	});
+	
+	function mostrarModal(url){
+		modalCargaProductos = $('<div></div>').dialog({
+			resizable: false,
+		    title: "Cargar producto",
+		    height: 400,
+		    width: 750,
+		    modal: true,
+		    open: function( event, ui ) {
+				$.get(url, function(data){
+					modalCargaProductos.html(data);
+				});
+		    },
+		    close: function(event, ui ){
+		    	modalCargaProductos.dialog('destroy');
+			}
+		  });
+		
+		modalCargaProductos.on('click', '.cancelar', function(){
+			modalCargaProductos.dialog('destroy');
+			return false;
+		});
+		
+		modalCargaProductos.on('click', '.cerrar', function(){
+			var url= '/facturalineas/index/'+$('#facturaId').val();
+			$.get(url, 
+				function(data){
+					$('#listaLineaProductos').parent().html(data);
+					modalCargaProductos.dialog('destroy');
+				})
+			
+			return false;
+		});
+		
+		modalCargaProductos.on('submit', function(e){
+			
+			var href = $(e.target).attr('action');
+			var data = $(e.target).serialize();
+			$.post(href, data, function(resultado){
+					 
+				if(resultado){
+					modalCargaProductos.html(resultado);
+				} else {
+					var url= '/facturalineas/index/'+$('#facturaId').val();
+					$.get(url, 
+						function(data){
+							$('#listaLineaProductos').parent().html(data);
+							modalCargaProductos.dialog('destroy');
+						})
+					
+				}
+			});
+			return false;
+		});
+		
+		
+		return modalCargaProductos;
+	}
+	
+	
+	contenedor.find('form').on('submit', function(){
+		var url = $(this).attr("action");
+		var query = $(this).serialize();
+		$.get(url+"?"+query, function(data){
+			contenedor.parent().html(data);
+		});
+		return false;
+	});
+
+
+	/*
+	 * Seleccion de check en la tabla
+	 */
+	$('#checkAll').change( function(){
+		var table = $(this).closest('table');
+		table.find("input[name='check_listado[]']").prop("checked", $(this).prop( "checked" ) );
+	});
+
+	$(document).on('click', '#eliminarfacturas', function(){
+		link = $(this).attr("href");
+		var retorno = false;
+
+		if($("input[name='check_listado[]']:checked").length == 0) {
+			alert("Debe seleccionar al menos una linea de factura.");
+			return false;
+		}
+		
+		
+		var ids = $("input[name='check_listado[]']").serialize();
+		
+
+		
+		var dialogo = $('<div><p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span> ¿Está seguro que desea eliminar los registros registros seleccionados?<p></div>');
+	    dialogo.dialog({
+	        resizable: false,
+	        height:180,
+	        modal: true,
+	        title: "Eliminar",
+	        buttons: {
+	          Eliminar: function() {
+	            $.post(link, ids, function(data){
+	            	if(data.success) {
+	            		location.reload();
+	            	} else {
+	            		alert("No se pudo eliminar las lineas de productos.");
+	            	}
+	            });
+	          },
+	          Cancelar: function( event, ui ) {
+	            $( this ).dialog( "close" );
+	          }
+	        },
+		    close: function(){
+		    	$( this ).dialog( "destroy" );
+		    }
+	      });
+	    return false;
+	}); 
+		
+	});	
+</script>
+</div>
+</body>
+</html>
+

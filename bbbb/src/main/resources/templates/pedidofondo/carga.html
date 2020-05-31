@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html xmlns:layout="http://www.w3.org/1999/xhtml" layout:decorate="~{fragments/main}">
+ 
+<body>
+<div layout:fragment="content">
+
+	<div th:replace="pedidofondo/nav-pedidofondo :: nav-pedidofondo"></div>	 	
+		
+	 
+	<div class="content-wrapper">
+		<div class="content-header">
+   			<div class="container-fluid"><div class="row mb-2"><div class="col-sm-12"><h1 class="m-0 text-dark">CARGA PEDIDO FONDO</h1></div></div></div> 
+  		</div>
+  		
+	     <!-- Main content -->
+		    <section class="content">
+		      <div class="container-fluid">
+				<!-- Main row -->
+		        <div class="row">
+		          <div class="col-12">
+					<div class="card">
+		             	<div class="card-body">
+		             	
+		             	 <form th:action="@{/facturas/index}" method="get">
+			             	 <div class="row">
+			             	 	<div class="col-sm-2">
+			                      <div class="form-group">
+				                    <label for="InputNombre">Numero</label>
+				                    <input type="text" class="form-control" th:value=${numero} name="numero" id="numero" placeholder="Numero">
+				                  </div>
+			                    </div>
+			                    <!-- <div class="col-sm-2">
+			                      <div class="form-group">
+				                    <label for="InputNombre">Cuit</label>
+				                    <input type="text" class="form-control" th:value=${cuit} name="cuit" id="nombre" placeholder="Cuit">
+				                  </div>
+			                    </div> -->
+			                    <div class="col-sm-2">
+			                    	<div class="form-group">
+			                    		<label for="InputNombre">&nbsp;</label>
+				                    	<button type="submit" class="btn btn-block btn-primary"><i class="fas fa-search"></i> Buscar</button>
+				                  	</div>
+			                    </div> 
+			                    <div class="col-sm-2">
+			                    	<div class="form-group">
+			                    		<label for="InputNombre">&nbsp;</label>
+				                    	<a th:href="@{/facturas/index}" class="btn btn-block btn-default" role="button" title="Limpiar">Limpiar</a>
+				                  </div>
+			                    </div>
+			                    
+			                    <div class="col-sm-2">
+			                    	<div class="form-group">
+			                    		<label for="InputNombre">&nbsp;</label>
+				                    	<a th:href="@{/pedidofondos/show/{id} (id=${idPedidofondo})}" class="btn btn-block btn-info" role="button" title="Limpiar">Volver al Pedido</a>
+				                  </div>
+			                    </div>
+			             	 </div>		
+		             	 </form>  	
+						 
+						              	 		
+		                 <div class="row">
+		                 <input type="hidden" class="form-control" id="idPedidofondo" th:value="${idPedidofondo}">
+		                 <table id="example1" class="table table-striped table-bordered dataTable">
+		                    <thead>
+		                    <tr>
+		                      <th width="10">#</th>	
+		                      <th>ID</th>
+		                      <th>Numero</th>
+		                      <th>Expediente</th>
+		                      <th>Proveedor</th>
+		                      <th>Total</th>
+		                      <th>Pedido Fondo</th>
+		                      <th>Total Deuda</th>
+		                      <th width="30"></th>
+		                    </tr>
+		                    </thead>
+		                    <tbody>
+			                    <tr th:each="factura : ${facturas}" class="">
+			                      <td></td>
+			                      <td th:text="${factura.id}"></td>
+			                      <td th:text="${factura.numero}"></td>
+			                      <td th:text="${factura.expediente != null}?${factura.expediente.getNombreCompleto()} : ''"></td>
+			                      <td th:text="${factura.proveedor != null}?${factura.proveedor.nombre} : ''"></td>
+			                      <td th:text="${utils.moneda(factura.getTotal())}"></td>
+			                      <td th:text="${utils.moneda(factura.getTotalPedidoFondo())}"></td>
+			                      <td th:text="${utils.moneda(factura.getTotalDeudaPedido())}"></td>
+			                      <td>
+			                      	<a  
+			                      		data-url="/pedidofondos/modalCargarPedido"
+			                      		th:data-factura="${factura.id}"
+			                      		href="#" 
+			                      		class="btn btn-info btn-sm cargarPedidoFondo" role="button" title="Eliminar">
+			                      		<i class="fas fa-arrow-up" aria-hidden="true"></i>
+			                      	</a>
+			                      	 
+			                      	
+			                      </td>
+			                    </tr>
+		                    </tbody>
+		                  </table>
+		                   
+		                </div><!-- Main row -->
+		                  
+		                 
+		                   <div th:replace="fragments/paginator-nav :: paginator"></div> 
+	                     
+		              </div><!-- /.card-body -->
+		            </div><!-- /.card -->
+		          </div><!-- /.col-12 -->
+				</div><!-- Main row -->
+		        
+		        
+		        <!-- /.row -->
+    		</div><!--/. container-fluid -->
+		    </section>
+		    <!-- /.content -->
+    </div>
+	
+</div>
+</body>
+</html>

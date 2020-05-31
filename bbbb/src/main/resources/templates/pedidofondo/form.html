@@ -21,7 +21,7 @@
 		            <div class="card card-primary">
 		              <div th:replace="fragments/alertSucces :: alertSucces"></div>	
 		              <form th:action="@{/pedidofondos/save}" th:object="${pedidofondo}" method="post">
-		              	<input type="hidden" th:field="*{id}">
+		              	<input type="hidden" id="pedidofondoId" th:field="*{id}">
 		                <div class="card-body">
 		                   <div class="row">
 		                    <div class="col-sm-6">
@@ -46,6 +46,7 @@
 		                <div class="card-footer">
 		                	<div th:if="${disabled}">
 		                  		<a class="btn btn-primary" th:href="@{/pedidofondos/edit/{id} (id=${id})}">Editar</a>
+		                  		<a class="btn btn-primary" th:href="@{/pedidofondos/carga/{id} (id=${id})}">Cargar Pedido</a>
 		                  	</div>
 		                	<div th:if="${!disabled}">
 		                  		<button type="submit" class="btn btn-primary">Guardar</button>
@@ -53,6 +54,48 @@
 		                </div>
 		              </form>
 		            </div>
+		            
+		            <div class="card card-primary card-outline">
+			          <div class="card-header">
+			            <h3 class="card-title">
+			              <i class="fas fa-user"></i>
+			              Detalles Pedidos
+			            </h3>
+			          </div>
+			          <div class="card-body">
+			            
+			            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+			              <li class="nav-item">
+			                 <a class="nav-link active" id="linea-tab" data-toggle="pill" href="#linea" role="tab" aria-controls="linea" aria-selected="true">
+			                 Pedidos</a>
+			              </li>
+			             
+			            </ul>	
+			            <div class="tab-content" id="custom-content-below-tabContent" aria-labelledby="permisos-tab">
+			            	<div class="tab-pane fade show active" id="linea" role="tabpanel" aria-labelledby="linea-tab">
+			            		
+			            		  	
+			            		<div id="listaLineaProductos" class="contenedorPaginador ajaxPaginador">
+			            		
+			            		</div>
+			            		<script>
+									$( function (){
+										 
+										 
+											 
+											var url= '/pedidofondolineas/index/'+$('#pedidofondoId').val();
+											$.get(url, 
+												function(data){
+													$('#listaLineaProductos').parent().html(data);
+												})
+										 	
+									});
+								</script>
+				                </div>
+			            	</div>
+			            	 
+            			</div>
+            		 </div>
 		            
 		          
 					             
