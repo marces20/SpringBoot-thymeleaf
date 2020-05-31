@@ -133,14 +133,15 @@
 			            		<script>
 									$( function (){
 										 
-										if(false){
-											 
-											var url= '/facturalineas/index/'+$('#facturaId').val();
-											$.get(url, 
-												function(data){
-													$('#listaLineaProductos').parent().html(data);
-												})
-										}	
+										 
+											if($('#facturaId').val() != ''){
+												var url= '/facturalineas/index/'+$('#facturaId').val();
+												$.get(url, 
+													function(data){
+														$('#listaLineaProductos').parent().html(data);
+													})
+											}	
+										 	
 									});
 								</script>
 				                </div>

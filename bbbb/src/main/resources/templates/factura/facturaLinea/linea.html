@@ -7,7 +7,7 @@
 		<td th:text="${fl.producto.nombre}"></td>
 		<td th:text="${fl.cantidad}"></td>
 		<td th:text="${fl.precio}"></td>
-		<td th:text="${fl.getTotal()}"></td>
+		<td th:text="${utils.moneda(fl.getTotal())}"></td>
 		<td>
 			<a th:href="@{/facturalineas/delete/{id} (id=${fl.id}) }" 
 			    class="btn btn-danger btn-sm notSeleccion eliminarProducto" role="button" title="Eliminar">

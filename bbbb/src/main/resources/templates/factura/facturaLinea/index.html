@@ -25,7 +25,7 @@
 			<th>Producto</th>
 			<th>Cantidad</th>
 			<th>Precio</th>
-			<th>total</th>
+			<th>Total</th>
 			<th width="95"></th>
 		<tr>	
 	</thead>
@@ -68,7 +68,6 @@ $( function(){
 		if(confirm(mensaje)){
 			$this = $(this);
 			$.get(url, function(data){
-				alert(data.success);
 				if(data.success){
 					$this.closest("tr").remove();
 				} else {
