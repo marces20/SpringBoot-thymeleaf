@@ -2,7 +2,7 @@ $(function(){
 
 	$(".date").inputmask("99/99/9999");
 	$(".numeroExpediente").inputmask("9999");
-	
+	$(".inputNumericMask").numeric_input();
 	$('table tr.pointer td:not(:has(.notSeleccion))').click( function(){
 		window.location.href = $(this).closest('tr').attr('href');
 	}); 
@@ -80,6 +80,46 @@ $(function(){
 				});
 			}
 			return false;
+		});
+		
+		$('.cargarPedidoFondo').click( function() { 
+			 
+			var url = $(this).attr("data-url");
+			var factura = $(this).attr("data-factura");
+			var dialogo = $('<div></div>');
+			var str = "";
+			
+			if($('#idPedidofondo').val().length > 0){
+				str += "pedidofondo_id="+$('#idPedidofondo').val();
+			}
+			
+			str += "&factura_id="+factura;
+			 
+			 
+			dialogo.dialog({
+				title: "Cargar Pedido Fondo",
+		    	resizable: false,
+				autoOpen: true,
+				modal: true,
+				height: 350,
+				width:650,
+		        buttons: {
+			          Cerrar: function() {
+			            $( this ).dialog( "destroy" );
+			            location.reload();
+			          }
+			    },
+		    	close: function(event, ui ){
+		    		$(this).dialog( "destroy" );
+		    		location.reload();
+		    		
+		    	},
+			    open: function( event, ui ) {
+					$.get(url,str,  function(data){
+						dialogo.html(data);
+					});	
+			    }
+		    });
 		});
 		
 		$('#reportePaseExpediente').click( function() { 
