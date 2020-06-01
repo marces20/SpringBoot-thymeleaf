@@ -33,6 +33,10 @@ public class Pedidofondo implements Serializable{
     @JoinColumn(name="ejercicio_id", nullable=false)
 	private Ejercicio ejercicio;
 	
+	@ManyToOne
+    @JoinColumn(name="estado_id", nullable=false)
+	private Estado estado;
+	
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date create_date;
 	
@@ -103,6 +107,14 @@ public class Pedidofondo implements Serializable{
 		this.ejercicio = ejercicio;
 	}
 	
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
+
 
 	private static final long serialVersionUID = 1L;
 }
