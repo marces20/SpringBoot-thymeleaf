@@ -1,6 +1,7 @@
 package com.bienes.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -11,27 +12,34 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
-@Table(name = "pedido_fondos")
-public class Pedidofondo implements Serializable{
+@Table(name = "Pagos")
+public class Pago implements Serializable {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "pedido_fondos_seq_gen")
-	@SequenceGenerator(name = "pedido_fondos_seq_gen", sequenceName = "pedido_fondos_id_seq",allocationSize=1)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "pagos_seq_gen")
+	@SequenceGenerator(name = "pagos_seq_gen", sequenceName = "pagos_id_seq",allocationSize=1)
 	private Integer id;
 	
 	@NotNull
-	private Integer numero;
+	public BigDecimal monto;
+	
+	@DateTimeFormat(pattern="dd/MM/yyyy")
+	private Date fecha;
 	
 	@NotNull
 	@ManyToOne
-    @JoinColumn(name="ejercicio_id", nullable=false)
-	private Ejercicio ejercicio;
+    @JoinColumn(name="pedidofondo_id", nullable=false)
+	private Pedidofondo pedidofondo;	
+	
+	@NotNull
+	@ManyToOne
+    @JoinColumn(name="factura_id", nullable=false)
+	private Factura factura;	
 	
 	@ManyToOne
     @JoinColumn(name="estado_id", nullable=false)
@@ -59,12 +67,44 @@ public class Pedidofondo implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getNumero() {
-		return numero;
+	public BigDecimal getMonto() {
+		return monto;
 	}
 
-	public void setNumero(Integer numero) {
-		this.numero = numero;
+	public void setMonto(BigDecimal monto) {
+		this.monto = monto;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
+	public Pedidofondo getPedidofondo() {
+		return pedidofondo;
+	}
+
+	public void setPedidofondo(Pedidofondo pedidofondo) {
+		this.pedidofondo = pedidofondo;
+	}
+
+	public Factura getFactura() {
+		return factura;
+	}
+
+	public void setFactura(Factura factura) {
+		this.factura = factura;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 
 	public Date getCreate_date() {
@@ -99,26 +139,5 @@ public class Pedidofondo implements Serializable{
 		this.create_user = create_user;
 	}
 	
-	public Ejercicio getEjercicio() {
-		return ejercicio;
-	}
-
-	public void setEjercicio(Ejercicio ejercicio) {
-		this.ejercicio = ejercicio;
-	}
-	
-	public Estado getEstado() {
-		return estado;
-	}
-
-	public void setEstado(Estado estado) {
-		this.estado = estado;
-	}
-	
-	public String getNombreCompleto() {
-		return this.getNumero()+"/"+this.getEjercicio().getNombre();
-	}
-
-
 	private static final long serialVersionUID = 1L;
 }
