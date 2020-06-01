@@ -17,5 +17,7 @@
     border-top:1px solid #ccc;
      
 }
-
+tr.borrador{color:blue;}
+tr.aprobado{color:green;}
+tr.pagado{color:green;}
 tr.cancelado{color:gray;}
