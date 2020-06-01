@@ -61,16 +61,20 @@
 		                      <th width="50">#</th>	
 		                      <th>ID</th>
 		                      <th>Numero</th>
-		                      <th>Ejercicio</th>	
+		                      <th>Ejercicio</th>
+		                      <th>Total</th>
+		                      <th>Estado</th>	
 		                      <th width="70"></th>
 		                    </tr>
 		                    </thead>
 		                    <tbody>
-			                    <tr th:each="pedidofondo : ${pedidofondos}" class="pointer" th:href="@{/pedidofondos/show/{id} (id=${pedidofondo.id})}">
+			                    <tr th:each="pedidofondo : ${pedidofondos}"  th:classappend="${pedidofondo.estado.css}" class="pointer" th:href="@{/pedidofondos/show/{id} (id=${pedidofondo.id})}">
 			                      <td></td>
 			                      <td th:text="${pedidofondo.id}"></td>
 			                      <td th:text="${pedidofondo.numero}"></td>
 			                      <td th:text="${pedidofondo.ejercicio.nombre}"></td>
+			                      <td></td>
+			                      <td th:text="${pedidofondo.estado.nombre}"></td>
 			                      <td>
 			                      	<a th:href="@{/pedidofondos/delete/{id} (id=${pedidofondo.id}) }" 
 			                      		onclick="return confirm('¿Estas seguro?')" 

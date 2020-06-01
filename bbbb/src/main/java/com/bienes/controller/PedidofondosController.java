@@ -26,11 +26,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-
+import com.bienes.model.Estado;
 import com.bienes.model.Factura;
 import com.bienes.model.Pedidofondo;
 import com.bienes.model.PedidofondoLinea;
 import com.bienes.service.IEjercicioService;
+import com.bienes.service.IEstadoService;
 import com.bienes.service.IFacturaService;
 import com.bienes.service.IPedidoFondoLineaService;
 import com.bienes.service.IPedidofondoService;
@@ -57,6 +58,9 @@ public class PedidofondosController {
 	
 	@Autowired
 	private IFacturaService serviceFactura;
+	
+	@Autowired
+	private IEstadoService serviceEstado;
 	
 	@GetMapping("/index")
 	public String mostrarIndex(
@@ -109,7 +113,7 @@ public class PedidofondosController {
 		
 		
 		if (result.hasErrors()){
-			model.addAttribute("msgalert", "Error no se ha podido guardar el pedido. "+result.getFieldError().toString());
+			model.addAttribute("msgalert", "Error no se ha podido guardar el pedido2. "+result.getFieldError().toString());
 			model.addAttribute("disabled", false);
 			return "pedidofondo/form";
 		}	
@@ -119,6 +123,7 @@ public class PedidofondosController {
 			if(pedidofondo.getId() == null) {
 				pedidofondo.setCreate_date(new Date());
 				pedidofondo.setCreate_user(serviceUsuario.getUserLogged());
+				pedidofondo.setEstado(serviceEstado.buscarPorId(1));
 				nuevo = true;
 			}else {
 				pedidofondo.setWrite_date(new Date());
