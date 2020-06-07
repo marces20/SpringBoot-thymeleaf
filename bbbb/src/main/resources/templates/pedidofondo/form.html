@@ -47,6 +47,9 @@
 		                	<div th:if="${disabled}">
 		                  		<a class="btn btn-primary" th:href="@{/pedidofondos/edit/{id} (id=${id})}">Editar</a>
 		                  		<a class="btn btn-primary" th:href="@{/pedidofondos/carga/{id} (id=${id})}">Cargar Pedido</a>
+		                  		 
+		                  		<a class="btn btn-primary" th:href="@{/pedidofondos/cambiarEstado/2/{id} (id=${id})}">Pasar a Aprobado</a>
+		                  		 
 		                  	</div>
 		                	<div th:if="${!disabled}">
 		                  		<button type="submit" class="btn btn-primary">Guardar</button>
