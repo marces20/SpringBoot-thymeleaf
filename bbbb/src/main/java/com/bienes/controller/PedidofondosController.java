@@ -190,6 +190,46 @@ public class PedidofondosController {
 		return "pedidofondo/carga";
 	}
 	
+	@GetMapping("/cambiarEstado/{idEstado}/{id}")
+	public String cambiarEstado(HttpServletRequest request,
+						Model model,
+						
+						@PathVariable("idEstado") Integer idEstado,
+						@PathVariable("id") Integer id,
+						RedirectAttributes attributes
+					   ){
+			
+		try {
+		
+		 
+			if(id != null && idEstado != null) {
+				Pedidofondo pedidofondo = servicePedidofondo.buscarPorId(id);
+				Estado estado = serviceEstado.buscarPorId(idEstado);
+				if(pedidofondo != null && estado != null) {
+					pedidofondo.setEstado(estado);
+					servicePedidofondo.guardar(pedidofondo);
+					attributes.addFlashAttribute("msgsuccess", "Se ha cambiado el estado");
+					return "redirect:/pedidofondos/show/"+id;
+				}else {
+					attributes.addFlashAttribute("msgalert", "Nose pueden determinar los parametros");
+					return "redirect:/pedidofondos/show/"+id; 
+				}
+				
+			}else {
+				attributes.addFlashAttribute("msgalert", "Nose pueden determinar los parametros");
+				return "redirect:/pedidofondos/show/"+id; 
+			}
+				
+		
+		}catch (Exception e) {
+			
+			attributes.addFlashAttribute("msgalert", "Error no se puede cambiar el estado."+e);
+			return "redirect:/pedidofondos/show/"+id; 
+		}
+		
+		
+	}
+	
 	@GetMapping("/modalCargarPedido")
 	public String modalCargarPedido(@ModelAttribute PedidofondoLinea pedidoFondoLinea,
 									@RequestParam(required = true) Integer pedidofondo_id,
