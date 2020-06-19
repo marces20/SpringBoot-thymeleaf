@@ -68,7 +68,7 @@ public class PedidofondoServiceJpa implements IPedidofondoService {
 	}
 	
 	@Override
-	public Page<Pedidofondo> findTodo(String numero, Pageable pageable) {
+	public Page<Pedidofondo> findTodo(String nombre, Pageable pageable) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Pedidofondo> query = cb.createQuery(Pedidofondo.class);
         Root<Pedidofondo> pedidofondo = query.from(Pedidofondo.class);
@@ -78,8 +78,8 @@ public class PedidofondoServiceJpa implements IPedidofondoService {
         List<Predicate> predicates = new ArrayList<>();
         
         
-        if(numero != null) {
-        	predicates.add(cb.like(pedidofondo.get("numero"),"%"+numero+"%"));
+        if(nombre != null) {
+        	predicates.add(cb.like(pedidofondo.get("nombre"),"%"+nombre+"%"));
         }
         
         //query.select(usuario).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
