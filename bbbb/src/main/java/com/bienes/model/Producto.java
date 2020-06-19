@@ -27,6 +27,10 @@ public class Producto implements Serializable{
 	@NotEmpty
 	private String nombre;
 	
+	@ManyToOne
+    @JoinColumn(name="rubro_id")
+	private Rubro rubro;
+	
 	@DateTimeFormat(pattern="dd/MM/yyyy")
 	private Date create_date;
 	
@@ -88,6 +92,16 @@ public class Producto implements Serializable{
 	public void setCreate_user(Usuario create_user) {
 		this.create_user = create_user;
 	}
+	
+	public Rubro getRubro() {
+		return rubro;
+	}
+
+	public void setRubro(Rubro rubro) {
+		this.rubro = rubro;
+	}
+
+
 
 	/**
 	 * 

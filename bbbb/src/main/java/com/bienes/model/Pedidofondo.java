@@ -26,7 +26,7 @@ public class Pedidofondo implements Serializable{
 	private Integer id;
 	
 	@NotNull
-	private Integer numero;
+	private String nombre;
 	
 	@NotNull
 	@ManyToOne
@@ -59,12 +59,12 @@ public class Pedidofondo implements Serializable{
 		this.id = id;
 	}
 
-	public Integer getNumero() {
-		return numero;
+	public String getNombre() {
+		return nombre;
 	}
 
-	public void setNumero(Integer numero) {
-		this.numero = numero;
+	public void setNumero(String nombre) {
+		this.nombre = nombre;
 	}
 
 	public Date getCreate_date() {
@@ -116,7 +116,7 @@ public class Pedidofondo implements Serializable{
 	}
 	
 	public String getNombreCompleto() {
-		return this.getNumero()+"/"+this.getEjercicio().getNombre();
+		return this.getNombre()+"/"+this.getEjercicio().getNombre();
 	}
 
 
