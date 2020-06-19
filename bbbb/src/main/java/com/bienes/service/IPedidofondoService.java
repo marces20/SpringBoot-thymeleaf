@@ -19,5 +19,5 @@ public interface IPedidofondoService {
 	
 	Page<Pedidofondo> findAll(Pageable pageable);
 	
-	Page<Pedidofondo> findTodo(String numero,Pageable pageable);
+	Page<Pedidofondo> findTodo(String nombre,Pageable pageable);
 }
