@@ -68,14 +68,14 @@ public class PedidofondosController {
 								  Model model,
 								  @RequestParam(defaultValue = "0") Integer page, 
 								  @RequestParam(defaultValue = "25") Integer pageSize,
-								  @RequestParam(required = false) String numero
+								  @RequestParam(required = false) String nombre
 							  ){
 			
 		Pageable pageRequest = PageRequest.of(page, pageSize);
-		Page<Pedidofondo> pedidofondos = servicePedidofondo.findTodo(numero, pageRequest);
+		Page<Pedidofondo> pedidofondos = servicePedidofondo.findTodo(nombre, pageRequest);
 		PageRender<Pedidofondo> pageRender = new PageRender<Pedidofondo>(request.getRequestURI()+"?"+request.getQueryString(), pedidofondos,pageSize,page);
 		
-		model.addAttribute("numero", numero);
+		model.addAttribute("nombre", nombre);
 		model.addAttribute("titulo", "Listado de Facturas");
 		model.addAttribute("pedidofondos", pedidofondos);
 		model.addAttribute("page", pageRender);
