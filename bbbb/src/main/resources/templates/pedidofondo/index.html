@@ -29,7 +29,7 @@
 			             	 	<div class="col-sm-2">
 			                      <div class="form-group">
 				                    <label for="InputNombre">Numero</label>
-				                    <input type="text" class="form-control" th:value=${numero} name="numero" id="numero" placeholder="Numero">
+				                    <input type="text" class="form-control" th:value=${nombre} name="nombre" id="nombre" placeholder="Numero">
 				                  </div>
 			                    </div>
 			                    <!-- <div class="col-sm-2">
@@ -71,7 +71,7 @@
 			                    <tr th:each="pedidofondo : ${pedidofondos}"  th:classappend="${pedidofondo.estado.css}" class="pointer" th:href="@{/pedidofondos/show/{id} (id=${pedidofondo.id})}">
 			                      <td></td>
 			                      <td th:text="${pedidofondo.id}"></td>
-			                      <td th:text="${pedidofondo.numero}"></td>
+			                      <td th:text="${pedidofondo.nombre}"></td>
 			                      <td th:text="${pedidofondo.ejercicio.nombre}"></td>
 			                      <td></td>
 			                      <td th:text="${pedidofondo.estado.nombre}"></td>
