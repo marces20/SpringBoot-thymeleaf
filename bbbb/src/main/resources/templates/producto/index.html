@@ -61,7 +61,7 @@
 		                      <th width="50">#</th>	
 		                      <th>ID</th>
 		                      <th>Nombre</th>
-		                       
+		                      <th>Rubro</th> 
 		                      <th width="70"></th>
 		                    </tr>
 		                    </thead>
@@ -70,6 +70,7 @@
 			                      <td></td>
 			                      <td th:text="${producto.id}"></td>
 			                      <td th:text="${producto.nombre}"></td>
+			                      <td th:text="${producto.rubro != null}?${producto.rubro.nombre} : ''"></td>
 			                       
 			                      <td>
 			                      	<a th:href="@{/productos/delete/{id} (id=${producto.id}) }" 

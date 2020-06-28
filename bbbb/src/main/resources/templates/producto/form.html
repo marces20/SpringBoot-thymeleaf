@@ -32,6 +32,34 @@
 			                    <input type="text" th:disabled="${disabled}" th:field="*{nombre}" th:d class="form-control" id="nombre" name="nombre" placeholder="Nombre" required="required">
 			                  </div>
 		                    </div>
+		                    <div class="col-sm-4">
+		                      <div class="form-group">
+			                    <label for="InputNombre">Rubro</label>
+			                    <div class="input-group">
+				                    <input type="text" th:disabled="${disabled}" class="form-control" 
+				                    th:field="*{rubro.nombre}" 
+				                    name="rubro.nombre" id="rubro" placeholder="Rubro" required="required">
+				                    
+				                    <input type="hidden" th:disabled="${disabled}" 
+				                    th:field="*{rubro.id}" class="form-control" 
+				                    id="rubro_id" name="rubro.id" required="required">
+				                  	
+				                  	<span th:unless="${disabled}" class="input-group-addon">
+										<a href="#" class="searchModal"
+													id="searchRubro" 
+													data-title="Selección de Rubro" 
+													data-url="/rubros/modalBuscar" 
+													data-height="650" 
+													data-width="700" 
+													data-listen="modal.seleccion.rubro.simple" 
+													data-label="#rubro" 
+													data-field="#rubro_id">
+											<i class="fas fa-search"></i>
+										</a>
+									</span>
+								</div>
+			                  </div>
+		                    </div>
 		                     
 		                  </div>
 		                  
