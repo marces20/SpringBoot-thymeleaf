@@ -201,7 +201,7 @@ $(function(){
 		
 		
 		$( "#organigrama" ).autocomplete({
-			  minLength: 3,
+			  minLength: 1,
 			  source: function( request, response ) {
 			   // Fetch data
 				   $.ajax({
@@ -249,7 +249,7 @@ $(function(){
 		}); 
 		
 		$( "#proveedor" ).autocomplete({
-			  minLength: 2,
+			  minLength: 1,
 			  source: function( request, response ) {
 			   // Fetch data
 				   $.ajax({
@@ -293,7 +293,7 @@ $(function(){
 		}); 
 		
 		$( "#iniciador" ).autocomplete({
-			  minLength: 3,
+			  minLength: 1,
 			  source: function( request, response ) {
 			   // Fetch data
 				   $.ajax({
@@ -335,6 +335,93 @@ $(function(){
 
 		}); 
 		
+		$( "#producto" ).autocomplete({
+			  minLength: 1,
+			  source: function( request, response ) {
+			   // Fetch data
+				   $.ajax({
+				    url: "/productos/suggest-producto/"+request.term,
+				    type: 'get',
+				    dataType: "json",
+				    data: {},
+				    success: function( data ) {
+				    	 if(!data.length){
+			    		        var result = [
+			    		            {
+			    		            	value: 'No se encuentran resultados', 
+			    		                id: 0
+			    		            }
+			    		        ];
+			    		        response(result);
+			    		    }else{
+						    	 response($.map(data.slice(0,20), function (item) {
+						    		 return {
+					                       value: item.nombre,
+					                       id: item.id
+					                    }
+				                    }))
+				    		
+				    	 }
+				    }
+				   });
+			  },
+			  select: function (event, ui) {
+			   		// Set selection
+				   if(ui.item.id != 0){
+					   $('#producto').val(ui.item.value); // display the selected text
+					   $('#producto_id').val(ui.item.id); // save selected id to input
+				   }else{
+					   $('#producto').val(''); // display the selected text
+					   $('#producto_id').val('');
+				   }
+				   return false;
+			  }
+
+		});
+		
+		$( "#rubro" ).autocomplete({
+			  minLength: 1,
+			  source: function( request, response ) {
+			   // Fetch data
+				   $.ajax({
+				    url: "/rubros/suggest-rubro/"+request.term,
+				    type: 'get',
+				    dataType: "json",
+				    data: {},
+				    success: function( data ) {
+				    	 if(!data.length){
+			    		        var result = [
+			    		            {
+			    		            	value: 'No se encuentran resultados', 
+			    		                id: 0
+			    		            }
+			    		        ];
+			    		        response(result);
+			    		    }else{
+						    	 response($.map(data.slice(0,20), function (item) {
+						    		 return {
+					                       value: item.nombre,
+					                       id: item.id
+					                    }
+				                    }))
+				    		
+				    	 }
+				    }
+				   });
+			  },
+			  select: function (event, ui) {
+			   		// Set selection
+				   if(ui.item.id != 0){
+					   $('#rubro').val(ui.item.value); // display the selected text
+					   $('#rubro_id').val(ui.item.id); // save selected id to input
+				   }else{
+					   $('#rubro').val(''); // display the selected text
+					   $('#rubro_id').val('');
+				   }
+				   return false;
+			  }
+
+		});
 		
 });
 
