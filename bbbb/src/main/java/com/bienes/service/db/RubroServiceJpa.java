@@ -20,21 +20,22 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bienes.model.Producto;
-import com.bienes.repository.ProductoRepository;
-import com.bienes.service.IProductoService;
+import com.bienes.model.Rubro;
+import com.bienes.repository.RubroRepository;
+import com.bienes.service.IRubroService;
 
 @Service
-public class ProductoServiceJpa implements IProductoService {
+public class RubroServiceJpa implements IRubroService{
 	
 	@Autowired
-	private ProductoRepository productoRepo;
+	private RubroRepository rubroRepo;
 	
 	@PersistenceContext
     private EntityManager entityManager;
 	
 	@Override
-	public Producto buscarPorId(Integer idProducto) {
-		Optional<Producto> optional = productoRepo.findById(idProducto);
+	public Rubro buscarPorId(Integer idRubro) {
+		Optional<Rubro> optional = rubroRepo.findById(idRubro);
 		if (optional.isPresent()) {
 			return optional.get();
 		}
@@ -42,43 +43,43 @@ public class ProductoServiceJpa implements IProductoService {
 	}
 	
 	@Override
-	public List<Producto> buscarPorIds(List<Integer> idsProducto) {
-		List<Producto> r = productoRepo.buscarPorIds(idsProducto);
+	public List<Rubro> buscarPorIds(List<Integer> idsRubro) {
+		List<Rubro> r = rubroRepo.buscarPorIds(idsRubro);
 		if(r.size() > 0) {
 			return r;
 		}else {
 			return null;
 		}
 	}
-
+	
 	@Override
-	public void guardar(Producto producto) {
-		productoRepo.save(producto);
+	public void guardar(Rubro rubro) {
+		rubroRepo.save(rubro);
 		
 	}
 
 	@Override
-	public void eliminar(Integer idProducto) {
-		productoRepo.deleteById(idProducto);
+	public void eliminar(Integer idRubro) {
+		rubroRepo.deleteById(idRubro);
 		
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Page<Producto> findAll(Pageable pageable) {
-		return productoRepo.findAll(pageable);
+	public Page<Rubro> findAll(Pageable pageable) {
+		return rubroRepo.findAll(pageable);
 	}
 	
 	@Override
-	public List<Producto> findByNombre(String nombre) {
-		return productoRepo.findByNombreLikeIgnoreCaseOrderByNombreAsc("%"+nombre+"%");
+	public List<Rubro> findByNombre(String nombre) {
+		return rubroRepo.findByNombreLikeIgnoreCaseOrderByNombreAsc("%"+nombre+"%");
 	}
-
+	
 	@Override
-	public Page<Producto> findTodo(String nombre, Pageable pageable) {
+	public Page<Rubro> findTodo(String nombre, Pageable pageable) {
 		CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Producto> query = cb.createQuery(Producto.class);
-        Root<Producto> producto = query.from(Producto.class);
+        CriteriaQuery<Rubro> query = cb.createQuery(Rubro.class);
+        Root<Rubro> rubro = query.from(Rubro.class);
  
        // Path<String> usernamePath = usuario.get("username");
  
@@ -86,7 +87,7 @@ public class ProductoServiceJpa implements IProductoService {
         
         
         if(nombre != null) {
-        	predicates.add(cb.like(cb.lower(producto.get("nombre")),"%"+nombre.toLowerCase()+"%"));
+        	predicates.add(cb.like(cb.lower(rubro.get("nombre")),"%"+nombre.toLowerCase()+"%"));
         }
         
         //query.select(usuario).where(cb.or(predicates.toArray(new Predicate[predicates.size()])));
@@ -100,15 +101,19 @@ public class ProductoServiceJpa implements IProductoService {
         System.out.println("--------totalRegistrosPorPagina-------- "+totalRegistrosPorPagina);
 		System.out.println("--------paginaAtual-------- "+paginaAtual);
 		System.out.println("------primeiroRegistro---------- "+primeiroRegistro);
+		System.out.println("------nombre---------- "+nombre);
+		System.out.println("------query---------- "+query);
+		
 		
 		Integer totalRows = entityManager.createQuery(query).getResultList().size();
         		
-        TypedQuery<Producto> typedQuery = entityManager.createQuery(query);
+        TypedQuery<Rubro> typedQuery = entityManager.createQuery(query);
         typedQuery.setFirstResult(primeiroRegistro);
         typedQuery.setMaxResults(totalRegistrosPorPagina);
         
         Long total = totalRows.longValue();
          
-        return new PageImpl<Producto>(typedQuery.getResultList(), pageable,total);
+        return new PageImpl<Rubro>(typedQuery.getResultList(), pageable,total);
 	}
+	
 }
